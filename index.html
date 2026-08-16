@@ -460,7 +460,22 @@
   }
 
   /* ---------- detalle de materia ---------- */
-  .card.subj[data-subj]{cursor:pointer}
+  .card.subj[data-subj],.card.subj[data-prac]{cursor:pointer}
+
+  /* estatus de prácticas */
+  .step{display:flex;align-items:center;gap:11px;padding:10px 0}
+  .step + .step{border-top:1px solid var(--line-2)}
+  .step-dot{
+    width:20px;height:20px;border-radius:50%;flex:none;display:grid;place-items:center;
+    box-shadow:inset 0 0 0 2px var(--line);color:#fff;
+  }
+  .step-dot svg{width:10px;height:10px}
+  .step.is-ok .step-dot{background:var(--ok);box-shadow:none}
+  .step.is-pend .step-dot{box-shadow:inset 0 0 0 2px var(--warn);background:var(--warn-soft)}
+  .step-main{flex:1;min-width:0}
+  .step-main b{display:block;font-size:13px;font-weight:600}
+  .step-main span{font-size:11.5px;color:var(--muted)}
+  .step.is-next .step-main b,.step.is-next .step-main span{opacity:.6}
   #taskOverlay{z-index:55}
 
   .sj-top{display:flex;gap:13px;align-items:flex-start;padding-right:34px}
@@ -546,6 +561,134 @@
   .ent-g.low{background:var(--danger-soft);color:var(--danger)}
   .ent-g.wait{background:var(--line-2);color:var(--muted);font-weight:600}
 
+  /* simulador de notas */
+  .sim-bar{
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px;
+    background:var(--accent-soft);border-radius:var(--r-md);padding:11px 13px;
+  }
+  .sim-tag{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    color:#fff;background:var(--accent);border-radius:6px;padding:3px 7px}
+  .sim-txt{font-size:12px;color:var(--ink-2)}
+  .sim-txt b{font-variant-numeric:tabular-nums}
+  .sim-txt i{font-style:normal;font-weight:650;font-variant-numeric:tabular-nums}
+  .sim-txt i.up{color:var(--ok)} .sim-txt i.down{color:var(--danger)}
+  .sim-clear{margin-left:auto;font-size:11.5px;font-weight:650;color:var(--accent);
+    border-bottom:1px solid currentColor;padding-bottom:1px}
+  .sim-in{display:flex;align-items:center;gap:5px;flex:none}
+  .sim-in input{
+    width:58px;padding:6px 8px;border-radius:9px;border:1px solid var(--line);
+    background:#fff;font:inherit;font-size:13px;font-weight:650;text-align:center;
+    font-variant-numeric:tabular-nums;color:var(--ink);
+  }
+  .sim-in input::placeholder{color:var(--muted);font-weight:500}
+  .sim-in input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+  .ent.is-sim .sim-in input{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+  .sim-x{width:22px;height:22px;border-radius:7px;display:grid;place-items:center;color:var(--muted)}
+  .sim-x:hover{background:var(--danger-soft);color:var(--danger)}
+  .sim-x svg{width:10px;height:10px}
+
+  /* ---------- bandeja de correo ---------- */
+  .modal.ml-modal{max-width:880px;padding:0;overflow:hidden;position:relative;max-height:88vh}
+  .ml{display:grid;grid-template-columns:236px 1fr;min-height:520px;max-height:88vh}
+  .ml-side{
+    background:#fafbfd;border-right:1px solid var(--line);padding:18px 12px;
+    overflow-y:auto;display:flex;flex-direction:column;gap:3px;
+  }
+  .ml-title{font-size:15px;font-weight:650;letter-spacing:-.02em;padding:0 8px 12px}
+  .ml-new{
+    display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:12px;
+    background:var(--ink);color:#fff;border-radius:12px;padding:10px;font-size:13px;font-weight:650;
+  }
+  .ml-new:hover{background:#000}
+  .ml-new svg{width:14px;height:14px}
+  .ml-grp{font-size:10.5px;font-weight:650;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--muted);padding:14px 8px 5px}
+  .ml-cat{
+    display:flex;align-items:center;gap:8px;width:100%;text-align:left;padding:8px 9px;
+    border-radius:10px;font-size:12.5px;font-weight:600;color:var(--ink-2);transition:background .12s;
+  }
+  .ml-cat:hover{background:#eef1f6}
+  .ml-cat.on{background:var(--ink);color:#fff}
+  .ml-cat .n{margin-left:auto;font-size:11px;font-weight:650;opacity:.6;font-variant-numeric:tabular-nums}
+  .ml-cat .dot{width:7px;height:7px;border-radius:2px;flex:none}
+  .ml-cat.sub{padding-left:26px;font-weight:500;font-size:12px}
+  .ml-cat svg{width:14px;height:14px;flex:none}
+  .ml-cat .chev{width:11px;height:11px;margin-left:auto;transition:transform .15s;opacity:.5}
+  .ml-av svg{width:15px;height:15px}
+  .ml-actions .btn-ghost svg{width:14px;height:14px}
+  .btn-ghost svg{flex:none}
+  .ml-cat.open .chev{transform:rotate(90deg)}
+
+  .ml-main{display:flex;flex-direction:column;min-width:0;overflow:hidden}
+  .ml-head{padding:18px 22px 12px;border-bottom:1px solid var(--line-2);padding-right:52px}
+  .ml-head b{font-size:15px;font-weight:650;letter-spacing:-.02em;display:block}
+  .ml-head span{font-size:11.5px;color:var(--muted)}
+  .ml-list{overflow-y:auto;padding:6px 10px 14px;flex:1}
+  .ml-msg{
+    display:flex;gap:11px;width:100%;text-align:left;padding:11px 12px;border-radius:12px;
+    transition:background .12s;
+  }
+  .ml-msg:hover{background:#f7f9fc}
+  .ml-av{width:32px;height:32px;border-radius:10px;flex:none;display:grid;place-items:center;
+    color:#fff;font-size:12px;font-weight:650}
+  .ml-msg-main{flex:1;min-width:0}
+  .ml-msg-top{display:flex;align-items:baseline;gap:8px}
+  .ml-msg-top b{font-size:13px;font-weight:650}
+  .ml-msg-top time{margin-left:auto;font-size:11px;color:var(--muted);flex:none}
+  .ml-msg-s{font-size:12.5px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ml-msg-p{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+  .ml-msg .udot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex:none;align-self:center}
+  .ml-tag{font-size:10px;font-weight:650;border-radius:6px;padding:2px 6px;background:var(--line-2);color:var(--muted)}
+
+  .ml-read{padding:18px 22px;overflow-y:auto;flex:1}
+  .ml-read h4{margin:10px 0 4px;font-size:17px;letter-spacing:-.02em}
+  .ml-read .meta{font-size:12px;color:var(--muted);margin-bottom:14px}
+  .ml-read p{font-size:13.5px;line-height:1.6;color:var(--ink-2);margin:0}
+
+  .ml-form{padding:18px 22px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:10px}
+  .fld label{display:block;font-size:11px;font-weight:650;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+  .fld input,.fld select,.fld textarea{
+    width:100%;padding:10px 12px;border-radius:11px;border:1px solid var(--line);
+    background:#fff;font:inherit;font-size:13.5px;color:var(--ink);
+  }
+  .fld textarea{min-height:150px;resize:vertical;line-height:1.55}
+  .fld input:focus,.fld select:focus,.fld textarea:focus{
+    outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+  .sched-box{display:none;gap:9px;align-items:flex-end}
+  .sched-box.on{display:flex}
+  .ml-actions{display:flex;gap:9px;flex-wrap:wrap;padding-top:4px}
+  .ml-actions .btn-ghost{margin-top:0;width:auto;padding:10px 16px}
+  .ml-actions .primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .ml-actions .primary:hover{background:#000;border-color:#000}
+
+  .confirm{position:absolute;inset:0;background:rgba(15,23,42,.42);display:none;
+    place-items:center;padding:24px;z-index:5}
+  .confirm.on{display:grid}
+  .confirm-box{background:#fff;border-radius:18px;padding:20px;max-width:340px;box-shadow:var(--shadow-lift)}
+  .confirm-box b{font-size:15px;letter-spacing:-.02em}
+  .confirm-box p{margin:6px 0 16px;font-size:12.5px;color:var(--muted);line-height:1.5}
+  .confirm-btns{display:flex;gap:8px}
+  .confirm-btns .btn-ghost{margin-top:0}
+  .btn-ghost.danger{background:var(--danger);color:#fff;border-color:var(--danger)}
+  .btn-ghost.danger:hover{background:#c03a3a;border-color:#c03a3a}
+
+  @media (max-width:760px){
+    .modal.ml-modal{max-width:100%}
+    .ml{grid-template-columns:1fr;min-height:0}
+    .ml-side{
+      border-right:0;border-bottom:1px solid var(--line);flex-direction:row;
+      overflow-x:auto;gap:6px;padding:14px 12px;align-items:center;
+    }
+    .ml-side .ml-title,.ml-side .ml-grp{display:none}
+    .ml-cat{width:auto;flex:none;white-space:nowrap;background:#eef1f6}
+    .ml-cat.sub{padding-left:9px}
+    .ml-cat .chev{display:none}
+    .ml-new{margin:0;flex:none;padding:9px 14px}
+    .ml-head{padding:14px 16px 10px;padding-right:48px}
+    .ml-list,.ml-read,.ml-form{padding-left:14px;padding-right:14px}
+  }
+
   .toast{
     position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);
     background:var(--ink);color:#fff;padding:10px 16px;border-radius:999px;font-size:12.5px;
@@ -598,6 +741,25 @@
   <!-- widgets -->
   <div class="grid" id="widgetGrid"></div>
 
+</div>
+
+<div class="overlay" id="mailOverlay">
+  <div class="modal ml-modal" role="dialog" aria-modal="true" aria-label="Bandeja de correo">
+    <button class="tk-close" id="mailClose" aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+    <div id="mailBody"></div>
+    <div class="confirm" id="mailConfirm">
+      <div class="confirm-box">
+        <b>¿Descartar el mensaje?</b>
+        <p>Empezaste a redactar un correo y todavía no lo enviás. Si salís ahora se pierde lo escrito.</p>
+        <div class="confirm-btns">
+          <button class="btn-ghost" data-keep>Seguir editando</button>
+          <button class="btn-ghost danger" data-discard>Descartar</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="overlay" id="infoOverlay">
@@ -696,7 +858,8 @@ const EVENTS = {
   6:[]
 };
 
-/* información ampliada de cada materia */
+/* información ampliada de cada materia.
+   parts = rubros con su peso; entries = cada evaluación, con nota o pendiente (g:null) */
 const INFO = {
   mate2:{
     par:"Paralelo 3 · 4 créditos",
@@ -706,12 +869,12 @@ const INFO = {
            {d:"Viernes", h:"08:00 – 09:00", room:"Lab. de Cómputo 3", b:"Edificio 12B"}],
     notices:[{k:"warn", t:"El examen parcial se adelanta al 27 de agosto por semana de integración.", d:"12 ago"},
              {k:"info", t:"Nuevo horario de tutorías: lunes y miércoles de 11:00 a 13:00.", d:"08 ago"}],
-    parts:[{l:"Tareas", w:30, g:8.6},{l:"Lecciones", w:20, g:8.2},
-           {l:"Proyecto", w:25, g:9.1},{l:"Examen parcial", w:25, g:9.0}],
-    past:[{n:"Tarea 1 — Límites y continuidad", d:now-21*D, g:9.2, w:10},
-          {n:"Lección 1 — Derivadas", d:now-14*D, g:8.4, w:15},
-          {n:"Examen parcial", d:now-7*D, g:9.0, w:25}],
-    future:[{n:"Examen final", d:now+24*D, w:30}]
+    parts:[{k:"tar", l:"Tareas", w:30},{k:"lec", l:"Lecciones", w:20},
+           {k:"pro", l:"Proyecto", w:25},{k:"par", l:"Examen parcial", w:25}],
+    entries:[{n:"Tarea 1 — Límites y continuidad", k:"tar", d:now-21*D, g:9.2},
+             {n:"Lección 1 — Derivadas",           k:"lec", d:now-14*D, g:8.4},
+             {n:"Examen parcial",                  k:"par", d:now-7*D,  g:9.0},
+             {n:"Proyecto — Modelado de una curva",k:"pro", d:now+18*D, g:null}]
   },
   dib2:{
     par:"Paralelo 1 · 5 créditos",
@@ -719,11 +882,12 @@ const INFO = {
              mail:"landrade@espol.edu.ec", office:"Estudio 3 · tutorías Mar y Jue 15:00–17:00"},
     sched:[{d:"Martes y Jueves", h:"11:00 – 14:00", room:"Estudio de Dibujo 3", b:"Edificio 15 · Facultad de Arte"}],
     notices:[{k:"info", t:"Traer escalímetro y papel A2 a todas las sesiones de taller.", d:"10 ago"}],
-    parts:[{l:"Láminas", w:40, g:9.5},{l:"Bocetos de clase", w:15, g:9.0},
-           {l:"Proyecto final", w:30, g:9.4},{l:"Asistencia", w:15, g:9.5}],
-    past:[{n:"Lámina 1 — Perspectiva isométrica", d:now-18*D, g:9.5, w:15},
-          {n:"Bocetos semana 3", d:now-11*D, g:9.0, w:5}],
-    future:[{n:"Proyecto final — Espacio interior", d:now+27*D, w:30}]
+    parts:[{k:"lam", l:"Láminas", w:40},{k:"boc", l:"Bocetos de clase", w:15},
+           {k:"pro", l:"Proyecto final", w:30},{k:"asi", l:"Asistencia", w:15}],
+    entries:[{n:"Lámina 1 — Perspectiva isométrica", k:"lam", d:now-18*D, g:9.5},
+             {n:"Bocetos semana 3",                  k:"boc", d:now-11*D, g:9.0},
+             {n:"Asistencia primer corte",           k:"asi", d:now-5*D,  g:9.5},
+             {n:"Proyecto final — Espacio interior", k:"pro", d:now+27*D, g:null}]
   },
   fis2:{
     par:"Paralelo 2 · 4 créditos",
@@ -733,12 +897,12 @@ const INFO = {
            {d:"Jueves", h:"15:00 – 17:00", room:"Laboratorio de Física 2", b:"Edificio 22 · planta baja"}],
     notices:[{k:"warn", t:"El laboratorio del jueves 20 se traslada al Lab. 4 por mantenimiento.", d:"13 ago"},
              {k:"info", t:"Guía de fórmulas permitida en la lección del domingo.", d:"11 ago"}],
-    parts:[{l:"Tareas", w:20, g:8.0},{l:"Lecciones", w:25, g:7.6},
-           {l:"Laboratorio", w:25, g:8.8},{l:"Examen parcial", w:30, g:8.0}],
-    past:[{n:"Tarea 1 — Ley de Coulomb", d:now-16*D, g:8.0, w:10},
-          {n:"Informe de laboratorio 2", d:now-9*D, g:8.8, w:10},
-          {n:"Examen parcial", d:now-4*D, g:8.0, w:30}],
-    future:[{n:"Examen final", d:now+25*D, w:30}]
+    parts:[{k:"tar", l:"Tareas", w:20},{k:"lec", l:"Lecciones", w:25},
+           {k:"lab", l:"Laboratorio", w:25},{k:"par", l:"Examen parcial", w:30}],
+    entries:[{n:"Tarea 1 — Ley de Coulomb",     k:"tar", d:now-16*D, g:8.0},
+             {n:"Informe de laboratorio 2",     k:"lab", d:now-9*D,  g:8.8},
+             {n:"Examen parcial",               k:"par", d:now-4*D,  g:8.0},
+             {n:"Informe de laboratorio 3",     k:"lab", d:now+10*D, g:null}]
   },
   arte1:{
     par:"Paralelo 4 · 3 créditos",
@@ -747,11 +911,12 @@ const INFO = {
     sched:[{d:"Lunes", h:"08:00 – 10:00", room:"Aula A-110", b:"Edificio 9 · Bloque de Humanidades"},
            {d:"Miércoles", h:"14:00 – 16:00", room:"Sala de Exposición", b:"Edificio 9 · planta alta"}],
     notices:[{k:"info", t:"Visita guiada al MAAC el sábado 29, cuenta como asistencia.", d:"09 ago"}],
-    parts:[{l:"Ensayos", w:30, g:9.0},{l:"Participación", w:20, g:9.2},
-           {l:"Exposición", w:25, g:8.8},{l:"Examen parcial", w:25, g:9.0}],
-    past:[{n:"Ensayo 1 — Vanguardias", d:now-19*D, g:9.0, w:15},
-          {n:"Exposición grupal", d:now-6*D, g:8.8, w:25}],
-    future:[{n:"Ensayo final", d:now+20*D, w:15}]
+    parts:[{k:"ens", l:"Ensayos", w:30},{k:"par", l:"Participación", w:20},
+           {k:"exp", l:"Exposición", w:25},{k:"exa", l:"Examen parcial", w:25}],
+    entries:[{n:"Ensayo 1 — Vanguardias",  k:"ens", d:now-19*D, g:9.0},
+             {n:"Participación primer corte", k:"par", d:now-8*D, g:9.2},
+             {n:"Exposición grupal",       k:"exp", d:now-6*D,  g:8.8},
+             {n:"Examen parcial",          k:"exa", d:now+14*D, g:null}]
   },
   hist:{
     par:"Paralelo 1 · 3 créditos",
@@ -759,26 +924,120 @@ const INFO = {
              mail:"cparedes@espol.edu.ec", office:"Of. 2-041 · tutorías Jue 14:00–16:00"},
     sched:[{d:"Miércoles y Viernes", h:"16:00 – 17:30", room:"Aula D-105", b:"Edificio 9 · Bloque de Humanidades"}],
     notices:[{k:"info", t:"Las citas del ensayo deben ir en formato APA 7.ª edición.", d:"07 ago"}],
-    parts:[{l:"Ensayos", w:35, g:8.5},{l:"Controles de lectura", w:20, g:8.0},
-           {l:"Exposición", w:20, g:8.9},{l:"Examen parcial", w:25, g:8.6}],
-    past:[{n:"Control de lectura 1", d:now-17*D, g:8.0, w:10},
-          {n:"Exposición — Art Nouveau", d:now-10*D, g:8.9, w:20}],
-    future:[{n:"Examen final", d:now+22*D, w:25}]
+    parts:[{k:"ens", l:"Ensayos", w:35},{k:"con", l:"Controles de lectura", w:20},
+           {k:"exp", l:"Exposición", w:20},{k:"par", l:"Examen parcial", w:25}],
+    entries:[{n:"Control de lectura 1",     k:"con", d:now-17*D, g:8.0},
+             {n:"Exposición — Art Nouveau", k:"exp", d:now-10*D, g:8.9},
+             {n:"Examen parcial",           k:"par", d:now+19*D, g:null}]
   }
 };
 
-// el promedio de cada materia se calcula desde los componentes
+/* las tareas pendientes del widget también entran como evaluaciones */
+TASKS.forEach(t=>{
+  const f = INFO[t.subject]; if(!f) return;
+  const map = {Tarea:"tar", Lección:"lec", Entrega:"lam", Ensayo:"ens"};
+  const k = f.parts.some(p=>p.k===map[t.type]) ? map[t.type] : f.parts[0].k;
+  f.entries.push({n:t.title, k, d:t.due, g:null, task:TASKS.indexOf(t)});
+});
+
+/* nota de un rubro: promedio de sus evaluaciones con nota (real o simulada) */
+function partGrade(f, k){
+  const g = f.entries.filter(e=>e.k===k).map(e=> e.g!=null ? e.g : e.sim)
+                     .filter(v=>v!=null && v!=="");
+  return g.length ? g.reduce((a,b)=>a+ +b,0)/g.length : null;
+}
+/* promedio ponderado sobre los rubros que ya tienen nota */
+function average(f, useSim){
+  let sw=0, sg=0;
+  f.parts.forEach(p=>{
+    const g = useSim ? partGrade(f,p.k)
+                     : (()=>{ const v=f.entries.filter(e=>e.k===p.k && e.g!=null).map(e=>e.g);
+                              return v.length ? v.reduce((a,b)=>a+b,0)/v.length : null; })();
+    if(g!=null){ sw+=p.w; sg+=p.w*g; }
+  });
+  return sw ? {g:sg/sw, w:sw} : {g:null, w:0};
+}
+const hasSim = (f) => f.entries.some(e=>e.g==null && e.sim!=null && e.sim!=="");
+
 Object.keys(INFO).forEach(k=>{
-  const p = INFO[k].parts, w = p.reduce((a,x)=>a+x.w,0);
-  SUBJECTS[k].grade = (p.reduce((a,x)=>a+x.w*x.g,0)/w).toFixed(1);
+  SUBJECTS[k].grade = average(INFO[k], false).g.toFixed(1);
 });
 
 const PRACTICES = {
-  emp:{name:"Prácticas Empresariales",  code:"PRE-400", color:"#4f46e5",
-       due: now + 47*D, hours:156, total:240, place:"Estudio Nómada"},
-  com:{name:"Servicio Comunitario",     code:"PSC-300", color:"#0e9f6e",
-       due: now + 12*D, hours:42,  total:160, place:"Casa Cultural Norte"}
+  emp:{name:"Prácticas Empresariales", code:"PRE-400", color:"#4f46e5",
+       due: now + 47*D, hours:156, total:240, place:"Estudio Nómada",
+       role:"Asistente de diseño de producto",
+       modality:"Presencial · 20 h semanales · Lun a Vie 14:00–18:00",
+       employer:{name:"Estudio Nómada S.A.", sector:"Diseño industrial y mobiliario",
+                 addr:"Av. Francisco de Orellana 1234, Edificio Blue Towers, piso 7 · Guayaquil"},
+       rep:{name:"Dis. Andrea Salas", role:"Jefa de proyectos · representante del empleador",
+            mail:"asalas@estudionomada.ec", phone:"+593 99 842 1176"},
+       tutor:"Ing. Mariana Vera, MSc. · tutora académica",
+       steps:[{l:"Convenio firmado",        s:"ok",   d:now-62*D},
+              {l:"Inicio de prácticas",     s:"ok",   d:now-58*D},
+              {l:"Primera evaluación",      s:"pend", d:now+6*D},
+              {l:"Segunda evaluación",      s:"next", d:now+34*D},
+              {l:"Informe final y cierre",  s:"next", d:now+47*D}]},
+
+  com:{name:"Servicio Comunitario", code:"PSC-300", color:"#0e9f6e",
+       due: now + 12*D, hours:42, total:160, place:"Casa Cultural Norte",
+       role:"Tallerista de dibujo para niños",
+       modality:"Presencial · 8 h semanales · sábados 09:00–13:00",
+       employer:{name:"Fundación Casa Cultural Norte", sector:"Organización sin fines de lucro",
+                 addr:"Calle 12 NO y Av. Rodolfo Baquerizo, Alborada 5.ª etapa · Guayaquil"},
+       rep:{name:"Lcdo. Byron Chávez", role:"Coordinador de programas · representante del empleador",
+            mail:"bchavez@casaculturalnorte.org", phone:"+593 98 331 4402"},
+       tutor:"Lcda. Paula Mendoza · tutora académica",
+       steps:[{l:"Convenio firmado",       s:"ok",   d:now-40*D},
+              {l:"Inicio del servicio",    s:"ok",   d:now-36*D},
+              {l:"Primera evaluación",     s:"pend", d:now+3*D},
+              {l:"Segunda evaluación",     s:"next", d:now+12*D},
+              {l:"Informe final y cierre", s:"next", d:now+12*D}]}
 };
+
+/* bandeja: cada correo pertenece a una clase (con rol docente/estudiante),
+   a un grupo, o a la categoría institucional */
+const MAILS = [
+  {id:1,  from:"Ing. Mariana Vera",   sub:"mate2", role:"doc",
+   s:"Cronograma de exámenes parciales", time:"09:12", unread:true,
+   b:"Estimados estudiantes, adjunto el cronograma actualizado de exámenes parciales. El de Matemáticas II se adelanta al 27 de agosto por la semana de integración. Cualquier cruce de horario me escriben antes del viernes."},
+  {id:2,  from:"Prof. L. Andrade",    sub:"dib2",  role:"doc",
+   s:"Retroalimentación de la entrega 2", time:"Ayer", unread:true,
+   b:"Carlos, revisé tu lámina. El encuadre mejoró bastante respecto a la primera entrega. Trabajá la línea de horizonte, quedó un poco alta y aplana el espacio. Nota: 9.5."},
+  {id:3,  from:"Biblioteca Central",  inst:true,
+   s:"Tu préstamo vence en 3 días", time:"Mar", unread:false,
+   b:"El libro «Design as Art» (Bruno Munari) vence el 18 de agosto. Podés renovarlo en línea si nadie lo ha reservado."},
+  {id:4,  from:"Sofía Lema",          sub:"mate2", role:"est",
+   s:"¿Alguien tiene los ejercicios 4.5 al 4.8?", time:"08:40", unread:true,
+   b:"Hola, me perdí la clase del miércoles por una cita médica. ¿Alguien me pasa la resolución de los ejercicios que dejó la Ing. Vera? Prometo devolver el favor con los apuntes de Física."},
+  {id:5,  from:"PhD. Rocío Cedeño",   sub:"fis2",  role:"doc",
+   s:"Cambio de laboratorio para el jueves 20", time:"Vie", unread:false,
+   b:"Por mantenimiento eléctrico, la práctica del jueves 20 se dicta en el Lab. 4 del mismo edificio. Traigan el informe 2 impreso."},
+  {id:6,  from:"Mateo Ríos",          sub:"fis2",  role:"est",
+   s:"Grupo de estudio para la lección", time:"Jue", unread:false,
+   b:"Armamos un grupo para repasar campos eléctricos el sábado a las 15:00 en la biblioteca. Somos seis, ¿te sumás?"},
+  {id:7,  from:"Secretaría Académica", inst:true,
+   s:"Apertura del período de registro", time:"Mié", unread:false,
+   b:"El registro de materias para el segundo término abre el 1 de septiembre a las 08:00. Revisá tu malla y tu récord académico antes de esa fecha."},
+  {id:8,  from:"Valeria Ochoa",       grp:0,
+   s:"Reunión del proyecto final movida a las 16:00", time:"10:05", unread:true,
+   b:"Chicos, el martes 18 nos vemos 16:00 en el estudio, no 15:00. Traigan las láminas impresas para armar el mural."},
+  {id:9,  from:"Diego Yépez",         grp:1,
+   s:"Subí los resúmenes de Física al Drive", time:"Lun", unread:false,
+   b:"Ya están los tres capítulos resumidos y las fórmulas en una hoja. El enlace es el mismo de siempre."},
+  {id:10, from:"Comité de Carrera",   grp:2,
+   s:"Convocatoria: representante estudiantil", time:"Lun", unread:true,
+   b:"Se abre la convocatoria para representante estudiantil de Diseño de Productos. Las postulaciones se reciben hasta el 25 de agosto."},
+  {id:11, from:"Mgtr. Carla Paredes", sub:"hist",  role:"doc",
+   s:"Formato de citas del ensayo", time:"07 ago", unread:false,
+   b:"Recuerden que el ensayo se cita en APA 7.ª edición. Un ensayo con citas mal formateadas pierde 2 puntos sobre 25."},
+  {id:12, from:"Lcda. Paula Mendoza", sub:"arte1", role:"doc",
+   s:"Visita guiada al MAAC", time:"09 ago", unread:false,
+   b:"La visita del sábado 29 cuenta como asistencia. Nos vemos 10:00 en la entrada principal del museo."},
+  {id:13, from:"Renata Pinto",        sub:"arte1", role:"est",
+   s:"Apuntes de la clase de vanguardias", time:"06 ago", unread:false,
+   b:"Dejo mis apuntes por si a alguien le sirven para el ensayo. Incluyen las diapositivas que la profe no subió."}
+];
 
 const MAIL = [
   {from:"Secretaría Académica", subj:"Cronograma de exámenes parciales", time:"09:12", unread:true},
@@ -807,6 +1066,9 @@ const I = {
     '<circle cx="32" cy="24.5" r="9.5" fill="#b4b0aa"/>'+
     '<path d="M17.5 64V47.5c0-6.1 6.5-10.5 14.5-10.5s14.5 4.4 14.5 10.5V64Z" fill="#b4b0aa"/>'+
   '</svg>',
+  pen:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg>',
+  clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.4l3.4 2"/></svg>',
+  chev:'<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>',
   today:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.2" y="5" width="17.6" height="16" rx="3"/><path d="M8 3v4M16 3v4M3.2 10h17.6"/><circle cx="12" cy="15.4" r="1.9" fill="currentColor" stroke="none"/></svg>',
   alert:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3.8 1.9 20.2h20.2z" stroke-linejoin="round"/><path d="M12 9.5v4.2M12 17.2h.01"/></svg>',
   info:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9.2"/><path d="M12 11v5.5M12 7.6h.01"/></svg>',
@@ -887,7 +1149,8 @@ function renderIdentity(){
 }
 
 function renderMail(){
-  const unread = MAIL.filter(m=>m.unread).length;
+  const MAIL = MAILS.slice(0,3).map(m=>({from:m.from, subj:m.s, time:m.time, unread:m.unread}));
+  const unread = MAILS.filter(m=>m.unread).length;
   const rows = MAIL.map(m =>
     '<button class="mail-item">'+
       '<span class="mail-dot'+(m.unread?'':' read')+'"></span>'+
@@ -900,7 +1163,7 @@ function renderMail(){
     head(I.mail, "Bandeja de correo", "correo institucional",
          unread ? '<span class="pill">'+unread+' sin leer</span>' : '') +
     '<div class="mail-list">'+rows+'</div>'+
-    '<button class="btn-ghost push">Abrir bandeja '+I.arrow+'</button>';
+    '<button class="btn-ghost push" data-mail>Abrir bandeja '+I.arrow+'</button>';
 }
 
 /* ============ widgets ============ */
@@ -1054,7 +1317,11 @@ function renderWidgets(){
       card.setAttribute("role","button"); card.tabIndex = 0;
       card.innerHTML = buildSubject(w.key);
     }
-    if(w.type==="practice"){ card.classList.add("subj"); card.innerHTML = buildPractice(w.key); }
+    if(w.type==="practice"){
+      card.classList.add("subj"); card.dataset.prac = w.key;
+      card.setAttribute("role","button"); card.tabIndex = 0;
+      card.innerHTML = buildPractice(w.key);
+    }
     if(w.type==="groups")   card.innerHTML = '<button class="remove" data-x aria-label="Quitar">'+I.x+'</button>'+buildGroups();
     grid.appendChild(card);
   });
@@ -1100,6 +1367,268 @@ function tick(){
   });
 }
 setInterval(tick, 1000);
+
+/* ============ bandeja de correo ============ */
+const mailOverlay = document.getElementById("mailOverlay");
+const mailBody    = document.getElementById("mailBody");
+const mailConfirm = document.getElementById("mailConfirm");
+
+let mailFilter = "all";      // all | inst | sched | s:<materia>[:doc|:est] | g:<idx>
+let mailOpen   = null;       // materia expandida en la barra lateral
+let mailView   = "list";     // list | read | compose
+let mailRead   = null;
+let draft      = {to:"", subject:"", body:"", when:""};
+let scheduled  = [];
+let pendingClose = null;     // qué hacer si el usuario confirma descartar
+
+const senderOf = (m) => m.inst ? {label:"Institucional", color:"#64748b"}
+  : m.grp!=null ? {label:GROUPS[m.grp].name, color:GROUPS[m.grp].colors[0]}
+  : {label:SUBJECTS[m.sub].name+" · "+(m.role==="doc"?"Docentes":"Estudiantes"), color:SUBJECTS[m.sub].color};
+
+function mailMatch(m, f){
+  if(f==="all")  return true;
+  if(f==="inst") return !!m.inst;
+  if(f.startsWith("g:")) return m.grp===+f.slice(2);
+  if(f.startsWith("s:")){
+    const [,sub,role] = f.split(":");
+    return m.sub===sub && (!role || m.role===role);
+  }
+  return false;
+}
+const mailCount = (f) => MAILS.filter(m=>mailMatch(m,f)).length;
+const unreadIn  = (f) => MAILS.filter(m=>mailMatch(m,f) && m.unread).length;
+
+function filterTitle(f){
+  if(f==="all")   return {t:"Todos los correos", s:MAILS.length+" mensajes · "+unreadIn("all")+" sin leer"};
+  if(f==="inst")  return {t:"Institucional", s:mailCount(f)+" mensajes"};
+  if(f==="sched") return {t:"Programados", s:scheduled.length+" envíos en cola"};
+  if(f.startsWith("g:")) return {t:GROUPS[+f.slice(2)].name, s:mailCount(f)+" mensajes · grupo"};
+  const [,sub,role] = f.split(":");
+  return {t:SUBJECTS[sub].name + (role? " · "+(role==="doc"?"Docentes":"Estudiantes") : ""),
+          s:mailCount(f)+" mensajes · "+SUBJECTS[sub].code};
+}
+
+function mailSidebar(){
+  const subs = Object.keys(SUBJECTS).filter(k=>MAILS.some(m=>m.sub===k));
+  const cat = (f,label,extra) =>
+    '<button class="ml-cat'+(mailFilter===f?" on":"")+'" data-f="'+f+'">'+(extra||"")+
+      esc(label)+'<span class="n">'+(f==="sched"?scheduled.length:mailCount(f))+'</span></button>';
+
+  return '<aside class="ml-side">'+
+    '<div class="ml-title">Bandeja</div>'+
+    '<button class="ml-new" data-compose>'+I.pen+'Redactar</button>'+
+    cat("all","Todos")+
+    cat("inst","Institucional")+
+    '<button class="ml-cat'+(mailFilter==="sched"?" on":"")+'" data-f="sched">'+I.clock+
+      'Programados<span class="n">'+scheduled.length+'</span></button>'+
+
+    '<div class="ml-grp">Clases</div>'+
+    subs.map(k=>{
+      const open = mailOpen===k;
+      return '<button class="ml-cat'+(mailFilter==="s:"+k?" on":"")+(open?" open":"")+'" data-f="s:'+k+'">'+
+          '<span class="dot" style="background:'+SUBJECTS[k].color+'"></span>'+esc(SUBJECTS[k].name)+
+          I.chev+'</button>'+
+        (open
+          ? cat("s:"+k+":doc","Docentes")+cat("s:"+k+":est","Estudiantes")
+          : "");
+    }).join("").replace(/class="ml-cat( on)?" data-f="s:[a-z0-9]+:(doc|est)"/g, m=>m.replace('class="ml-cat','class="ml-cat sub'))+
+
+    '<div class="ml-grp">Grupos</div>'+
+    GROUPS.map((g,i)=>'<button class="ml-cat'+(mailFilter==="g:"+i?" on":"")+'" data-f="g:'+i+'">'+
+        '<span class="dot" style="background:'+g.colors[0]+'"></span>'+esc(g.name)+
+        '<span class="n">'+mailCount("g:"+i)+'</span></button>').join("")+
+  '</aside>';
+}
+
+function mailMain(){
+  const ft = filterTitle(mailFilter);
+
+  if(mailView==="compose"){
+    return '<section class="ml-main">'+
+      '<div class="ml-head"><b>Nuevo mensaje</b><span>se envía desde tu correo institucional</span></div>'+
+      '<div class="ml-form">'+
+        '<div class="fld"><label>Para</label>'+
+          '<select id="cTo">'+
+            '<option value="">Elegí un destinatario…</option>'+
+            '<optgroup label="Docentes">'+
+              Object.keys(INFO).map(k=>'<option value="'+esc(INFO[k].teacher.mail)+'"'+
+                (draft.to===INFO[k].teacher.mail?" selected":"")+'>'+
+                esc(INFO[k].teacher.name)+' — '+esc(SUBJECTS[k].name)+'</option>').join("")+
+            '</optgroup>'+
+            '<optgroup label="Grupos">'+
+              GROUPS.map((g,i)=>'<option value="grupo-'+i+'"'+(draft.to==="grupo-"+i?" selected":"")+'>'+
+                esc(g.name)+'</option>').join("")+
+            '</optgroup>'+
+            '<optgroup label="Institucional">'+
+              '<option value="secretaria@espol.edu.ec"'+(draft.to==="secretaria@espol.edu.ec"?" selected":"")+'>Secretaría Académica</option>'+
+              '<option value="biblioteca@espol.edu.ec"'+(draft.to==="biblioteca@espol.edu.ec"?" selected":"")+'>Biblioteca Central</option>'+
+            '</optgroup>'+
+          '</select></div>'+
+        '<div class="fld"><label>Asunto</label>'+
+          '<input id="cSubject" type="text" value="'+esc(draft.subject)+'" placeholder="Asunto del mensaje"></div>'+
+        '<div class="fld"><label>Mensaje</label>'+
+          '<textarea id="cBody" placeholder="Escribí tu mensaje…">'+esc(draft.body)+'</textarea></div>'+
+        '<div class="sched-box'+(draft.when?" on":"")+'" id="schedBox">'+
+          '<div class="fld" style="flex:1"><label>Programar envío para</label>'+
+            '<input id="cWhen" type="datetime-local" value="'+esc(draft.when)+'"></div>'+
+        '</div>'+
+        '<div class="ml-actions">'+
+          '<button class="btn-ghost primary" data-send>'+(draft.when?"Programar envío":"Enviar")+'</button>'+
+          '<button class="btn-ghost" data-schedtoggle>'+I.clock+(draft.when?"Quitar programación":"Programar envío")+'</button>'+
+          '<button class="btn-ghost" data-cancel style="margin-left:auto">Descartar</button>'+
+        '</div>'+
+      '</div>'+
+    '</section>';
+  }
+
+  if(mailView==="read" && mailRead){
+    const m = mailRead, sn = senderOf(m);
+    return '<section class="ml-main">'+
+      '<div class="ml-head"><button class="back" data-list style="margin:0">'+I.arrow+'Volver</button></div>'+
+      '<div class="ml-read">'+
+        '<span class="ml-tag" style="background:'+sn.color+'1a;color:'+sn.color+'">'+esc(sn.label)+'</span>'+
+        '<h4>'+esc(m.s)+'</h4>'+
+        '<div class="meta">'+esc(m.from)+' · '+esc(m.time)+'</div>'+
+        '<p>'+esc(m.b)+'</p>'+
+        '<div class="ml-actions" style="margin-top:20px">'+
+          '<button class="btn-ghost primary" data-reply="'+m.id+'">Responder</button>'+
+        '</div>'+
+      '</div>'+
+    '</section>';
+  }
+
+  if(mailFilter==="sched"){
+    return '<section class="ml-main">'+
+      '<div class="ml-head"><b>Programados</b><span>'+scheduled.length+' envíos en cola</span></div>'+
+      '<div class="ml-list">'+
+        (scheduled.length ? scheduled.map((s,i)=>'<div class="ml-msg" style="cursor:default">'+
+          '<span class="ml-av" style="background:var(--warn)">'+I.clock+'</span>'+
+          '<span class="ml-msg-main">'+
+            '<span class="ml-msg-top"><b>'+esc(s.subject||"(sin asunto)")+'</b>'+
+              '<time>'+esc(fmtDue(s.at))+'</time></span>'+
+            '<span class="ml-msg-s">Para: '+esc(s.to)+'</span>'+
+            '<span class="ml-msg-p">'+esc(s.body.slice(0,90))+'</span>'+
+          '</span>'+
+          '<button class="file-x" data-unsched="'+i+'" aria-label="Cancelar envío">'+I.x+'</button>'+
+        '</div>').join("")
+        : '<div class="cal-empty" style="padding:20px">No tenés envíos programados.</div>')+
+      '</div>'+
+    '</section>';
+  }
+
+  const list = MAILS.filter(m=>mailMatch(m, mailFilter));
+  return '<section class="ml-main">'+
+    '<div class="ml-head"><b>'+esc(ft.t)+'</b><span>'+esc(ft.s)+'</span></div>'+
+    '<div class="ml-list">'+
+      (list.length ? list.map(m=>{
+        const sn = senderOf(m);
+        return '<button class="ml-msg" data-open="'+m.id+'">'+
+          '<span class="ml-av" style="background:'+sn.color+'">'+esc(m.from.trim().slice(0,1))+'</span>'+
+          '<span class="ml-msg-main">'+
+            '<span class="ml-msg-top"><b>'+esc(m.from)+'</b><time>'+esc(m.time)+'</time></span>'+
+            '<span class="ml-msg-s">'+esc(m.s)+'</span>'+
+            '<span class="ml-msg-p">'+esc(m.b.slice(0,100))+'…</span>'+
+          '</span>'+
+          (m.unread?'<span class="udot"></span>':'')+
+        '</button>';
+      }).join("") : '<div class="cal-empty" style="padding:20px">No hay mensajes en esta categoría.</div>')+
+    '</div>'+
+  '</section>';
+}
+
+function renderMailModal(){
+  mailBody.innerHTML = '<div class="ml">'+mailSidebar()+mailMain()+'</div>';
+}
+function openMail(){ mailView="list"; mailRead=null; renderMailModal(); mailOverlay.classList.add("open"); }
+
+const draftDirty = () => mailView==="compose" &&
+  (draft.to.trim() || draft.subject.trim() || draft.body.trim());
+
+function saveDraftFromForm(){
+  const g = id => document.getElementById(id);
+  if(g("cTo"))      draft.to      = g("cTo").value;
+  if(g("cSubject")) draft.subject = g("cSubject").value;
+  if(g("cBody"))    draft.body    = g("cBody").value;
+  if(g("cWhen"))    draft.when    = g("cWhen").value;
+}
+function clearDraft(){ draft = {to:"", subject:"", body:"", when:""}; }
+
+/* pide confirmación si hay un mensaje empezado */
+function guard(action){
+  saveDraftFromForm();
+  if(draftDirty()){ pendingClose = action; mailConfirm.classList.add("on"); return; }
+  action();
+}
+function closeMail(){ mailOverlay.classList.remove("open"); mailConfirm.classList.remove("on"); }
+
+mailConfirm.addEventListener("click", e=>{
+  if(e.target.closest("[data-keep]") || e.target===mailConfirm){
+    mailConfirm.classList.remove("on"); pendingClose=null; return;
+  }
+  if(e.target.closest("[data-discard]")){
+    mailConfirm.classList.remove("on");
+    clearDraft(); mailView="list";
+    const a = pendingClose; pendingClose=null;
+    if(a) a(); else renderMailModal();
+  }
+});
+
+document.getElementById("mailClose").addEventListener("click", ()=>guard(closeMail));
+mailOverlay.addEventListener("click", e=>{ if(e.target===mailOverlay) guard(closeMail); });
+
+mailBody.addEventListener("click", e=>{
+  const f = e.target.closest("[data-f]");
+  if(f){ const v=f.dataset.f;
+    guard(()=>{
+      if(v.startsWith("s:") && v.split(":").length===2) mailOpen = (mailOpen===v.slice(2)? null : v.slice(2));
+      mailFilter=v; mailView="list"; mailRead=null; renderMailModal();
+    });
+    return; }
+
+  const o = e.target.closest("[data-open]");
+  if(o){ const m = MAILS.find(x=>x.id===+o.dataset.open);
+         m.unread=false; mailRead=m; mailView="read"; renderMailModal(); renderMail(); return; }
+
+  if(e.target.closest("[data-list]")){ mailView="list"; mailRead=null; renderMailModal(); return; }
+  if(e.target.closest("[data-compose]")){ guard(()=>{ mailView="compose"; renderMailModal(); }); return; }
+
+  const r = e.target.closest("[data-reply]");
+  if(r){ const m = MAILS.find(x=>x.id===+r.dataset.reply);
+         draft = {to:m.from, subject:"Re: "+m.s, body:"", when:""};
+         mailView="compose"; renderMailModal(); return; }
+
+  if(e.target.closest("[data-schedtoggle]")){
+    saveDraftFromForm();
+    if(draft.when){ draft.when=""; }
+    else {
+      const d = new Date(Date.now()+D);
+      d.setMinutes(0,0,0);
+      draft.when = d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+
+        String(d.getDate()).padStart(2,"0")+"T08:00";
+    }
+    renderMailModal(); return;
+  }
+
+  if(e.target.closest("[data-cancel]")){ guard(()=>{ mailView="list"; renderMailModal(); }); return; }
+
+  const us = e.target.closest("[data-unsched]");
+  if(us){ scheduled.splice(+us.dataset.unsched,1); renderMailModal(); toast("Envío cancelado"); return; }
+
+  if(e.target.closest("[data-send]")){
+    saveDraftFromForm();
+    if(!draft.to){ toast("Elegí un destinatario"); return; }
+    if(!draft.body.trim()){ toast("El mensaje está vacío"); return; }
+    if(draft.when){
+      scheduled.push({to:draft.to, subject:draft.subject, body:draft.body, at:new Date(draft.when).getTime()});
+      toast("Envío programado para "+fmtDue(new Date(draft.when).getTime()));
+      mailFilter="sched";
+    } else {
+      toast("Mensaje enviado");
+      mailFilter="all";
+    }
+    clearDraft(); mailView="list"; renderMailModal();
+  }
+});
 
 /* ============ detalle de materia y notas ============ */
 const infoOverlay = document.getElementById("infoOverlay");
@@ -1167,39 +1696,149 @@ function openSubject(key){
 
 function openGrades(key){
   const s = SUBJECTS[key], f = INFO[key];
-  const totalW = f.parts.reduce((a,x)=>a+x.w,0);
+  const real = average(f, false), proj = average(f, true);
+  const sim  = hasSim(f);
+  const diff = sim ? proj.g - real.g : 0;
+  const nameOf = (k) => (f.parts.find(p=>p.k===k)||{}).l || "";
 
-  const pend = f.future.map(x=>({n:x.n, d:x.d, w:x.w}))
-    .concat(TASKS.filter(t=>t.subject===key).map(t=>({n:t.title, d:t.due, w:t.points})))
-    .sort((a,b)=>a.d-b.d);
+  const graded = f.entries.filter(e=>e.g!=null).sort((a,b)=>b.d-a.d);
+  const pend   = f.entries.filter(e=>e.g==null).sort((a,b)=>a.d-b.d);
 
   infoBody.innerHTML =
     '<button class="back" data-back="'+key+'">'+I.arrow+esc(s.name)+'</button>'+
 
     '<div class="sj-sub" style="margin:0">Promedio del semestre · '+esc(s.code)+'</div>'+
-    '<div class="gr-hero"><b style="color:'+s.color+'">'+s.grade+'</b><span>sobre 10 · '+totalW+'% evaluado</span></div>'+
+    '<div class="gr-hero">'+
+      '<b style="color:'+(sim?"var(--accent)":s.color)+'">'+(sim?proj.g:real.g).toFixed(1)+'</b>'+
+      '<span>sobre 10 · '+(sim?proj.w:real.w)+'% evaluado</span>'+
+    '</div>'+
+    (sim
+      ? '<div class="sim-bar">'+
+          '<span class="sim-tag">simulado</span>'+
+          '<span class="sim-txt">Sin las notas simuladas tu promedio es <b>'+real.g.toFixed(1)+'</b> '+
+            '<i class="'+(diff>=0?"up":"down")+'">'+(diff>=0?"▲ +":"▼ ")+diff.toFixed(1)+'</i></span>'+
+          '<button class="sim-clear" data-simclear="'+key+'">Volver a sin calificar</button>'+
+        '</div>'
+      : '')+
 
     '<div class="tk-h">Cómo se compone el promedio</div>'+
-    f.parts.map(p=>'<div class="part">'+
+    f.parts.map(p=>{
+      const gReal = (()=>{ const v=f.entries.filter(e=>e.k===p.k && e.g!=null).map(e=>e.g);
+                           return v.length ? v.reduce((a,b)=>a+b,0)/v.length : null; })();
+      const gSim  = partGrade(f, p.k);
+      const isSim = gReal==null ? gSim!=null : (gSim!=null && Math.abs(gSim-gReal)>0.001);
+      const g = gSim;
+      return '<div class="part">'+
         '<div class="part-top"><b>'+esc(p.l)+'</b><span class="w">'+p.w+'% del total</span>'+
-          '<span class="g">'+p.g.toFixed(1)+'</span></div>'+
-        '<div class="track"><i style="width:'+(p.g*10).toFixed(0)+'%;background:'+s.color+'"></i></div>'+
-      '</div>').join("")+
+          '<span class="g"'+(isSim?' style="color:var(--accent)"':'')+'>'+
+            (g==null ? '<span class="w">sin calificar</span>' : g.toFixed(1))+'</span></div>'+
+        '<div class="track"><i style="width:'+(g==null?0:(g*10).toFixed(0))+
+          '%;background:'+(isSim?"var(--accent)":s.color)+'"></i></div>'+
+      '</div>';
+    }).join("")+
 
     '<div class="tk-h">Entregas calificadas</div>'+
-    (f.past.length ? f.past.slice().sort((a,b)=>b.d-a.d).map(e=>'<div class="ent">'+
-        '<span class="ent-main"><b>'+esc(e.n)+'</b><span>'+fmtLong(e.d).split(",")[0]+' · vale '+e.w+'%</span></span>'+
+    (graded.length ? graded.map(e=>'<div class="ent">'+
+        '<span class="ent-main"><b>'+esc(e.n)+'</b><span>'+fmtLong(e.d).split(",")[0]+' · '+esc(nameOf(e.k))+'</span></span>'+
         '<span class="ent-g'+gradeClass(e.g)+'">'+e.g.toFixed(1)+'</span>'+
       '</div>').join("") : '<div class="cal-empty">Todavía no hay notas registradas.</div>')+
 
-    '<div class="tk-h">Entregas futuras</div>'+
-    (pend.length ? pend.map(e=>'<div class="ent">'+
-        '<span class="ent-main"><b>'+esc(e.n)+'</b><span>'+fmtDue(e.d)+' · vale '+e.w+'%</span></span>'+
-        '<span class="ent-g wait">—</span>'+
-      '</div>').join("") : '<div class="cal-empty">Sin entregas programadas.</div>')+
+    '<div class="tk-h">Entregas futuras · simulá una nota para ver el escenario</div>'+
+    (pend.length ? pend.map((e,i)=>{
+      const idx = f.entries.indexOf(e);
+      const on = e.sim!=null && e.sim!=="";
+      return '<div class="ent'+(on?" is-sim":"")+'">'+
+        '<span class="ent-main"><b>'+esc(e.n)+'</b><span>'+fmtDue(e.d)+' · '+esc(nameOf(e.k))+'</span></span>'+
+        '<span class="sim-in">'+
+          '<input type="number" min="0" max="10" step="0.1" placeholder="—" inputmode="decimal" '+
+            'data-sim="'+key+':'+idx+'" value="'+(on?e.sim:"")+'" aria-label="Nota simulada">'+
+          (on?'<button class="sim-x" data-simx="'+key+':'+idx+'" aria-label="Quitar nota simulada">'+I.x+'</button>':'')+
+        '</span>'+
+      '</div>';
+    }).join("") : '<div class="cal-empty">Sin entregas programadas.</div>')+
 
     '<div class="tk-foot"><button class="btn-ghost" data-close>Cerrar</button></div>';
 }
+
+/* --- detalle de práctica --- */
+function openPractice(key){
+  const p = PRACTICES[key];
+  const days = Math.max(0, Math.ceil((p.due - Date.now())/D));
+  const u = days<=15 ? "danger" : days<=45 ? "warn" : "ok";
+  const pct = Math.round(p.hours/p.total*100);
+  const label = {ok:"completado", pend:"pendiente", next:"por habilitar"};
+
+  infoBody.innerHTML =
+    '<div class="sj-top">'+
+      '<div class="sj-ava">'+I.person+'</div>'+
+      '<div style="min-width:0;flex:1">'+
+        '<div class="sj-name">'+esc(p.name)+'</div>'+
+        '<div class="sj-sub">'+esc(p.code)+' · '+esc(p.place)+'</div>'+
+        '<div class="sj-teacher">'+esc(p.role)+'<span>cargo asignado</span></div>'+
+      '</div>'+
+    '</div>'+
+
+    '<div class="tk-cd is-'+u+'">'+
+      '<div><div class="tk-cd-lbl">Días restantes</div>'+
+        '<div class="prac-days is-'+u+'" style="margin:0"><b>'+days+'</b><i>d</i></div></div>'+
+      '<div class="tk-cd-right"><b>'+fmtDue(p.due)+'</b><span>cierre de la práctica</span></div>'+
+    '</div>'+
+    '<div class="track" style="margin-top:10px"><i style="width:'+pct+'%;background:'+p.color+'"></i></div>'+
+    '<div class="sj-sub" style="margin-top:7px">'+p.hours+' de '+p.total+' horas cumplidas · '+pct+'%</div>'+
+
+    '<div class="tk-h">Estatus</div>'+
+    p.steps.map(s=>'<div class="step is-'+s.s+'">'+
+      '<span class="step-dot">'+(s.s==="ok"?I.check:"")+'</span>'+
+      '<span class="step-main"><b>'+esc(s.l)+'</b><span>'+fmtDue(s.d)+'</span></span>'+
+      '<span class="pill '+(s.s==="ok"?"ok":s.s==="pend"?"warn":"")+'">'+label[s.s]+'</span>'+
+    '</div>').join("")+
+
+    '<div class="tk-h">Empleador</div>'+
+    '<div class="tk-grid">'+
+      '<div class="tk-cell"><span>Empresa u organización</span><b>'+esc(p.employer.name)+'</b></div>'+
+      '<div class="tk-cell"><span>Sector</span><b>'+esc(p.employer.sector)+'</b></div>'+
+      '<div class="tk-cell" style="grid-column:1/-1"><span>Dirección</span><b>'+esc(p.employer.addr)+'</b></div>'+
+    '</div>'+
+
+    '<div class="tk-h">Representante en el empleador</div>'+
+    '<div class="sj-top" style="padding-right:0">'+
+      '<div class="sj-ava" style="width:46px;height:46px;border-radius:14px">'+I.person+'</div>'+
+      '<div style="min-width:0;flex:1">'+
+        '<div class="sj-teacher" style="margin:0">'+esc(p.rep.name)+'<span>'+esc(p.rep.role)+'</span></div>'+
+        '<div class="sj-chips" style="margin-top:7px">'+
+          '<span class="sj-chip">'+esc(p.rep.mail)+'</span>'+
+          '<span class="sj-chip">'+esc(p.rep.phone)+'</span>'+
+        '</div>'+
+      '</div>'+
+    '</div>'+
+
+    '<div class="tk-grid" style="margin-top:14px">'+
+      '<div class="tk-cell"><span>Modalidad</span><b>'+esc(p.modality)+'</b></div>'+
+      '<div class="tk-cell"><span>Seguimiento ESPOL</span><b>'+esc(p.tutor)+'</b></div>'+
+    '</div>'+
+
+    '<div class="tk-foot"><button class="btn-ghost" data-close>Cerrar</button></div>';
+
+  infoOverlay.classList.add("open");
+}
+
+/* simulador de notas */
+infoBody.addEventListener("change", e=>{
+  const inp = e.target.closest("[data-sim]"); if(!inp) return;
+  const [key, i] = inp.dataset.sim.split(":");
+  let v = inp.value.trim().replace(",",".");
+  if(v!==""){ v = Math.max(0, Math.min(10, parseFloat(v))); if(isNaN(v)) v=""; }
+  INFO[key].entries[+i].sim = v===""? null : v;
+  openGrades(key);
+});
+infoBody.addEventListener("click", e=>{
+  const x = e.target.closest("[data-simx]");
+  if(x){ const [key,i] = x.dataset.simx.split(":");
+         INFO[key].entries[+i].sim = null; openGrades(key); return; }
+  const c = e.target.closest("[data-simclear]");
+  if(c){ const key = c.dataset.simclear;
+         INFO[key].entries.forEach(en=>en.sim=null); openGrades(key); }
+});
 
 infoBody.addEventListener("click", e=>{
   const g = e.target.closest("[data-grades]");
@@ -1383,7 +2022,11 @@ function closeModal(){ overlay.classList.remove("open"); }
 overlay.addEventListener("click", e=>{ if(e.target===overlay) closeModal(); });
 document.addEventListener("keydown", e=>{
   if(e.key==="Escape"){                       // cierra solo la capa de arriba
-    if(taskOverlay.classList.contains("open")) closeTaskDetail();
+    if(mailOverlay.classList.contains("open")){
+      if(mailConfirm.classList.contains("on")){ mailConfirm.classList.remove("on"); pendingClose=null; }
+      else guard(closeMail);
+    }
+    else if(taskOverlay.classList.contains("open")) closeTaskDetail();
     else if(infoOverlay.classList.contains("open")) closeInfo();
     else closeModal();
   }
@@ -1411,6 +2054,9 @@ document.getElementById("widgetGrid").addEventListener("click", e=>{
 
   const sj = e.target.closest("[data-subj]");
   if(sj){ openSubject(sj.dataset.subj); return; }
+
+  const pr = e.target.closest("[data-prac]");
+  if(pr){ openPractice(pr.dataset.prac); return; }
 
   const x = e.target.closest("[data-x]");
   if(x){
@@ -1444,6 +2090,8 @@ function toast(msg){
   renderIdentity();
   renderMail();
   renderWidgets();
+  document.getElementById("mailCard").addEventListener("click", openMail);
+  document.getElementById("mailCard").style.cursor = "pointer";
 })();
 </script>
 </body>
