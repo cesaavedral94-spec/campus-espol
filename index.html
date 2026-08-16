@@ -588,8 +588,13 @@
   .sim-x svg{width:10px;height:10px}
 
   /* ---------- bandeja de correo ---------- */
-  .modal.ml-modal{max-width:880px;padding:0;overflow:hidden;position:relative;max-height:88vh}
-  .ml{display:grid;grid-template-columns:236px 1fr;min-height:520px;max-height:88vh}
+  .modal.ml-modal{
+    max-width:880px;padding:0;overflow:hidden;position:relative;
+    height:min(640px, 88vh);display:flex;flex-direction:column;
+  }
+  #mailBody{flex:1;min-height:0;display:flex}
+  .ml{display:grid;grid-template-columns:236px 1fr;flex:1;min-height:0;width:100%}
+  .ml-side,.ml-main{min-height:0}
   .ml-side{
     background:#fafbfd;border-right:1px solid var(--line);padding:18px 12px;
     overflow-y:auto;display:flex;flex-direction:column;gap:3px;
@@ -631,12 +636,12 @@
   .ml-msg:hover{background:#f7f9fc}
   .ml-av{width:32px;height:32px;border-radius:10px;flex:none;display:grid;place-items:center;
     color:#fff;font-size:12px;font-weight:650}
-  .ml-msg-main{flex:1;min-width:0}
+  .ml-msg-main{flex:1;min-width:0;display:block;overflow:hidden}
   .ml-msg-top{display:flex;align-items:baseline;gap:8px}
-  .ml-msg-top b{font-size:13px;font-weight:650}
+  .ml-msg-top b{font-size:13px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .ml-msg-top time{margin-left:auto;font-size:11px;color:var(--muted);flex:none}
-  .ml-msg-s{font-size:12.5px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .ml-msg-p{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+  .ml-msg-s{display:block;font-size:12.5px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ml-msg-p{display:block;font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
   .ml-msg .udot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex:none;align-self:center}
   .ml-tag{font-size:10px;font-weight:650;border-radius:6px;padding:2px 6px;background:var(--line-2);color:var(--muted)}
 
@@ -655,6 +660,36 @@
   .fld textarea{min-height:150px;resize:vertical;line-height:1.55}
   .fld input:focus,.fld select:focus,.fld textarea:focus{
     outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+  /* selector de destinatario */
+  .pick{position:relative}
+  .pick-btn{
+    width:100%;display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:11px;
+    border:1px solid var(--line);background:#fff;font-size:13.5px;color:var(--muted);text-align:left;
+  }
+  .pick-btn.has{color:var(--ink);font-weight:600}
+  .pick-btn svg{width:12px;height:12px;margin-left:auto;opacity:.5;transform:rotate(90deg);flex:none}
+  .pick.open .pick-btn{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+  .pick.open .pick-btn svg{transform:rotate(-90deg)}
+  .pick-panel{
+    position:absolute;top:calc(100% + 6px);left:0;right:0;z-index:4;background:#fff;
+    border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow-lift);
+    max-height:290px;overflow-y:auto;padding:6px;
+  }
+  .pick-grp{font-size:10px;font-weight:650;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--muted);padding:9px 10px 4px}
+  .pick-row,.pick-item{
+    width:100%;display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:9px;
+    font-size:13px;font-weight:600;color:var(--ink-2);text-align:left;
+  }
+  .pick-row:hover,.pick-item:hover{background:#f3f5f9}
+  .pick-row svg{width:11px;height:11px;margin-left:auto;opacity:.45;transition:transform .15s;flex:none}
+  .pick-row.open svg{transform:rotate(90deg)}
+  .pick-row .dot,.pick-item .dot{width:7px;height:7px;border-radius:2px;flex:none}
+  .pick-item{font-weight:500;padding-left:26px;font-size:12.5px}
+  .pick-item.on{background:var(--ink);color:#fff}
+  .pick-sub{font-size:10.5px;font-weight:650;color:var(--muted);padding:7px 10px 3px 26px;
+    letter-spacing:.04em;text-transform:uppercase}
+
   .sched-box{display:none;gap:9px;align-items:flex-end}
   .sched-box.on{display:flex}
   .ml-actions{display:flex;gap:9px;flex-wrap:wrap;padding-top:4px}
@@ -674,8 +709,8 @@
   .btn-ghost.danger:hover{background:#c03a3a;border-color:#c03a3a}
 
   @media (max-width:760px){
-    .modal.ml-modal{max-width:100%}
-    .ml{grid-template-columns:1fr;min-height:0}
+    .modal.ml-modal{max-width:100%;height:min(660px, 90vh)}
+    .ml{grid-template-columns:1fr;grid-template-rows:auto 1fr}
     .ml-side{
       border-right:0;border-bottom:1px solid var(--line);flex-direction:row;
       overflow-x:auto;gap:6px;padding:14px 12px;align-items:center;
@@ -1373,9 +1408,19 @@ const mailOverlay = document.getElementById("mailOverlay");
 const mailBody    = document.getElementById("mailBody");
 const mailConfirm = document.getElementById("mailConfirm");
 
-let mailFilter = "all";      // all | inst | sched | s:<materia>[:doc|:est] | g:<idx>
-let mailOpen   = null;       // materia expandida en la barra lateral
+/* compañeros por materia, para elegir destinatario al redactar */
+const STUDENTS = {
+  mate2:["Sofía Lema","Andrés Mora","Nicolás Bravo"],
+  dib2: ["Camila Ruiz","Valeria Ochoa"],
+  fis2: ["Mateo Ríos","Julia Vargas"],
+  arte1:["Renata Pinto","Tomás Aguirre"],
+  hist: ["Iván Solís","Daniela Cueva"]
+};
+
+let mailFilter = "all";      // all | inst | sched | s:<materia> | g:<idx>
 let mailView   = "list";     // list | read | compose
+let pickOpen   = false;      // selector de destinatario desplegado
+let pickSubj   = null;       // clase abierta dentro del selector
 let mailRead   = null;
 let draft      = {to:"", subject:"", body:"", when:""};
 let scheduled  = [];
@@ -1383,16 +1428,13 @@ let pendingClose = null;     // qué hacer si el usuario confirma descartar
 
 const senderOf = (m) => m.inst ? {label:"Institucional", color:"#64748b"}
   : m.grp!=null ? {label:GROUPS[m.grp].name, color:GROUPS[m.grp].colors[0]}
-  : {label:SUBJECTS[m.sub].name+" · "+(m.role==="doc"?"Docentes":"Estudiantes"), color:SUBJECTS[m.sub].color};
+  : {label:SUBJECTS[m.sub].name, color:SUBJECTS[m.sub].color};
 
 function mailMatch(m, f){
   if(f==="all")  return true;
   if(f==="inst") return !!m.inst;
   if(f.startsWith("g:")) return m.grp===+f.slice(2);
-  if(f.startsWith("s:")){
-    const [,sub,role] = f.split(":");
-    return m.sub===sub && (!role || m.role===role);
-  }
+  if(f.startsWith("s:")) return m.sub===f.slice(2);
   return false;
 }
 const mailCount = (f) => MAILS.filter(m=>mailMatch(m,f)).length;
@@ -1403,9 +1445,8 @@ function filterTitle(f){
   if(f==="inst")  return {t:"Institucional", s:mailCount(f)+" mensajes"};
   if(f==="sched") return {t:"Programados", s:scheduled.length+" envíos en cola"};
   if(f.startsWith("g:")) return {t:GROUPS[+f.slice(2)].name, s:mailCount(f)+" mensajes · grupo"};
-  const [,sub,role] = f.split(":");
-  return {t:SUBJECTS[sub].name + (role? " · "+(role==="doc"?"Docentes":"Estudiantes") : ""),
-          s:mailCount(f)+" mensajes · "+SUBJECTS[sub].code};
+  const sub = f.slice(2);
+  return {t:SUBJECTS[sub].name, s:mailCount(f)+" mensajes · "+SUBJECTS[sub].code};
 }
 
 function mailSidebar(){
@@ -1423,21 +1464,51 @@ function mailSidebar(){
       'Programados<span class="n">'+scheduled.length+'</span></button>'+
 
     '<div class="ml-grp">Clases</div>'+
-    subs.map(k=>{
-      const open = mailOpen===k;
-      return '<button class="ml-cat'+(mailFilter==="s:"+k?" on":"")+(open?" open":"")+'" data-f="s:'+k+'">'+
-          '<span class="dot" style="background:'+SUBJECTS[k].color+'"></span>'+esc(SUBJECTS[k].name)+
-          I.chev+'</button>'+
-        (open
-          ? cat("s:"+k+":doc","Docentes")+cat("s:"+k+":est","Estudiantes")
-          : "");
-    }).join("").replace(/class="ml-cat( on)?" data-f="s:[a-z0-9]+:(doc|est)"/g, m=>m.replace('class="ml-cat','class="ml-cat sub'))+
+    subs.map(k=>'<button class="ml-cat'+(mailFilter==="s:"+k?" on":"")+'" data-f="s:'+k+'">'+
+        '<span class="dot" style="background:'+SUBJECTS[k].color+'"></span>'+esc(SUBJECTS[k].name)+
+        '<span class="n">'+mailCount("s:"+k)+'</span></button>').join("")+
 
     '<div class="ml-grp">Grupos</div>'+
     GROUPS.map((g,i)=>'<button class="ml-cat'+(mailFilter==="g:"+i?" on":"")+'" data-f="g:'+i+'">'+
         '<span class="dot" style="background:'+g.colors[0]+'"></span>'+esc(g.name)+
         '<span class="n">'+mailCount("g:"+i)+'</span></button>').join("")+
   '</aside>';
+}
+
+/* selector de destinatario: primero clases, y al abrir una clase, docentes y estudiantes */
+function recipientPicker(){
+  const row = (v,label,extra) =>
+    '<button class="pick-item'+(draft.to===v?" on":"")+'" data-to="'+esc(v)+'">'+
+      (extra||"")+esc(label)+'</button>';
+
+  return '<div class="pick'+(pickOpen?" open":"")+'">'+
+    '<button class="pick-btn'+(draft.to?" has":"")+'" data-picktoggle>'+
+      esc(draft.to || "Elegí un destinatario…")+I.chev+'</button>'+
+    (pickOpen ? '<div class="pick-panel">'+
+      '<div class="pick-grp">Clases</div>'+
+      Object.keys(SUBJECTS).map(k=>{
+        const open = pickSubj===k;
+        return '<button class="pick-row'+(open?" open":"")+'" data-picksubj="'+k+'">'+
+            '<span class="dot" style="background:'+SUBJECTS[k].color+'"></span>'+
+            esc(SUBJECTS[k].name)+I.chev+'</button>'+
+          (open
+            ? '<div class="pick-sub">Docentes</div>'+
+              row(INFO[k].teacher.name, INFO[k].teacher.name)+
+              '<div class="pick-sub">Estudiantes</div>'+
+              (STUDENTS[k]||[]).map(n=>row(n,n)).join("")+
+              row("Todo el paralelo · "+SUBJECTS[k].name, "Todo el paralelo")
+            : "");
+      }).join("")+
+
+      '<div class="pick-grp">Grupos</div>'+
+      GROUPS.map(g=>row(g.name, g.name,
+        '<span class="dot" style="background:'+g.colors[0]+'"></span>')).join("")+
+
+      '<div class="pick-grp">Institucional</div>'+
+      row("Secretaría Académica","Secretaría Académica")+
+      row("Biblioteca Central","Biblioteca Central")+
+    '</div>' : '')+
+  '</div>';
 }
 
 function mailMain(){
@@ -1447,23 +1518,7 @@ function mailMain(){
     return '<section class="ml-main">'+
       '<div class="ml-head"><b>Nuevo mensaje</b><span>se envía desde tu correo institucional</span></div>'+
       '<div class="ml-form">'+
-        '<div class="fld"><label>Para</label>'+
-          '<select id="cTo">'+
-            '<option value="">Elegí un destinatario…</option>'+
-            '<optgroup label="Docentes">'+
-              Object.keys(INFO).map(k=>'<option value="'+esc(INFO[k].teacher.mail)+'"'+
-                (draft.to===INFO[k].teacher.mail?" selected":"")+'>'+
-                esc(INFO[k].teacher.name)+' — '+esc(SUBJECTS[k].name)+'</option>').join("")+
-            '</optgroup>'+
-            '<optgroup label="Grupos">'+
-              GROUPS.map((g,i)=>'<option value="grupo-'+i+'"'+(draft.to==="grupo-"+i?" selected":"")+'>'+
-                esc(g.name)+'</option>').join("")+
-            '</optgroup>'+
-            '<optgroup label="Institucional">'+
-              '<option value="secretaria@espol.edu.ec"'+(draft.to==="secretaria@espol.edu.ec"?" selected":"")+'>Secretaría Académica</option>'+
-              '<option value="biblioteca@espol.edu.ec"'+(draft.to==="biblioteca@espol.edu.ec"?" selected":"")+'>Biblioteca Central</option>'+
-            '</optgroup>'+
-          '</select></div>'+
+        '<div class="fld"><label>Para</label>'+recipientPicker()+'</div>'+
         '<div class="fld"><label>Asunto</label>'+
           '<input id="cSubject" type="text" value="'+esc(draft.subject)+'" placeholder="Asunto del mensaje"></div>'+
         '<div class="fld"><label>Mensaje</label>'+
@@ -1546,7 +1601,6 @@ const draftDirty = () => mailView==="compose" &&
 
 function saveDraftFromForm(){
   const g = id => document.getElementById(id);
-  if(g("cTo"))      draft.to      = g("cTo").value;
   if(g("cSubject")) draft.subject = g("cSubject").value;
   if(g("cBody"))    draft.body    = g("cBody").value;
   if(g("cWhen"))    draft.when    = g("cWhen").value;
@@ -1577,12 +1631,22 @@ document.getElementById("mailClose").addEventListener("click", ()=>guard(closeMa
 mailOverlay.addEventListener("click", e=>{ if(e.target===mailOverlay) guard(closeMail); });
 
 mailBody.addEventListener("click", e=>{
+  /* --- selector de destinatario --- */
+  if(e.target.closest("[data-picktoggle]")){
+    saveDraftFromForm(); pickOpen = !pickOpen; renderMailModal(); return;
+  }
+  const ps = e.target.closest("[data-picksubj]");
+  if(ps){ saveDraftFromForm();
+          pickSubj = pickSubj===ps.dataset.picksubj ? null : ps.dataset.picksubj;
+          renderMailModal(); return; }
+  const to = e.target.closest("[data-to]");
+  if(to){ saveDraftFromForm(); draft.to = to.dataset.to;
+          pickOpen=false; renderMailModal(); return; }
+  if(pickOpen && !e.target.closest(".pick")){ saveDraftFromForm(); pickOpen=false; renderMailModal(); }
+
   const f = e.target.closest("[data-f]");
   if(f){ const v=f.dataset.f;
-    guard(()=>{
-      if(v.startsWith("s:") && v.split(":").length===2) mailOpen = (mailOpen===v.slice(2)? null : v.slice(2));
-      mailFilter=v; mailView="list"; mailRead=null; renderMailModal();
-    });
+    guard(()=>{ mailFilter=v; mailView="list"; mailRead=null; renderMailModal(); });
     return; }
 
   const o = e.target.closest("[data-open]");
