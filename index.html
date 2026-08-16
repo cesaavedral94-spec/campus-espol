@@ -516,6 +516,21 @@
   .sj-item-main span{font-size:11px;color:var(--muted)}
   .sj-item .cd{font-size:13px;flex:none}
 
+  .sj-repo{
+    width:100%;margin-top:16px;border:1px solid var(--line);border-radius:var(--r-md);
+    padding:13px 15px;display:flex;align-items:center;gap:12px;text-align:left;
+    background:#fff;transition:border-color .15s,background .15s;
+  }
+  .sj-repo:hover{border-color:var(--accent);background:var(--accent-soft)}
+  .sj-repo-ico{width:34px;height:34px;border-radius:11px;flex:none;display:grid;place-items:center;
+    background:var(--accent-soft);color:var(--accent)}
+  .sj-repo:hover .sj-repo-ico{background:#fff}
+  .sj-repo-ico svg{width:17px;height:17px}
+  .sj-repo-t{flex:1;min-width:0}
+  .sj-repo-t b{display:block;font-size:13.5px;font-weight:650;letter-spacing:-.01em}
+  .sj-repo-t span{display:block;font-size:11.5px;color:var(--muted);margin-top:1px}
+  .sj-repo > svg{width:14px;height:14px;color:var(--muted);flex:none}
+
   .sj-avg{
     width:100%;margin-top:18px;border-radius:var(--r-md);padding:15px 17px;
     background:var(--ink);color:#fff;display:flex;align-items:center;gap:12px;
@@ -1071,7 +1086,13 @@ const MAILS = [
    b:"La visita del sábado 29 cuenta como asistencia. Nos vemos 10:00 en la entrada principal del museo."},
   {id:13, from:"Renata Pinto",        sub:"arte1", role:"est",
    s:"Apuntes de la clase de vanguardias", time:"06 ago", unread:false,
-   b:"Dejo mis apuntes por si a alguien le sirven para el ensayo. Incluyen las diapositivas que la profe no subió."}
+   b:"Dejo mis apuntes por si a alguien le sirven para el ensayo. Incluyen las diapositivas que la profe no subió."},
+  {id:14, from:"Dis. Andrea Salas",   prac:"emp",
+   s:"Agenda de la primera evaluación", time:"11:20", unread:true,
+   b:"Carlos, la primera evaluación de prácticas la haremos el viernes 21 a las 15:00 en la sala de reuniones. Traé el registro de horas firmado y un resumen de los proyectos en los que participaste."},
+  {id:15, from:"Lcdo. Byron Chávez",  prac:"com",
+   s:"Cambio de horario del taller del sábado", time:"Vie", unread:false,
+   b:"El taller de este sábado empieza 10:00 en vez de 09:00 porque la sala está ocupada. Las horas igual se cuentan completas."}
 ];
 
 const MAIL = [
@@ -1101,6 +1122,7 @@ const I = {
     '<circle cx="32" cy="24.5" r="9.5" fill="#b4b0aa"/>'+
     '<path d="M17.5 64V47.5c0-6.1 6.5-10.5 14.5-10.5s14.5 4.4 14.5 10.5V64Z" fill="#b4b0aa"/>'+
   '</svg>',
+  folder:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2.5h8a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>',
   pen:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg>',
   clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.4l3.4 2"/></svg>',
   chev:'<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>',
@@ -1428,6 +1450,7 @@ let pendingClose = null;     // qué hacer si el usuario confirma descartar
 
 const senderOf = (m) => m.inst ? {label:"Institucional", color:"#64748b"}
   : m.grp!=null ? {label:GROUPS[m.grp].name, color:GROUPS[m.grp].colors[0]}
+  : m.prac ? {label:PRACTICES[m.prac].name, color:PRACTICES[m.prac].color}
   : {label:SUBJECTS[m.sub].name, color:SUBJECTS[m.sub].color};
 
 function mailMatch(m, f){
@@ -1435,6 +1458,7 @@ function mailMatch(m, f){
   if(f==="inst") return !!m.inst;
   if(f.startsWith("g:")) return m.grp===+f.slice(2);
   if(f.startsWith("s:")) return m.sub===f.slice(2);
+  if(f.startsWith("p:")) return m.prac===f.slice(2);
   return false;
 }
 const mailCount = (f) => MAILS.filter(m=>mailMatch(m,f)).length;
@@ -1445,6 +1469,8 @@ function filterTitle(f){
   if(f==="inst")  return {t:"Institucional", s:mailCount(f)+" mensajes"};
   if(f==="sched") return {t:"Programados", s:scheduled.length+" envíos en cola"};
   if(f.startsWith("g:")) return {t:GROUPS[+f.slice(2)].name, s:mailCount(f)+" mensajes · grupo"};
+  if(f.startsWith("p:")){ const p=PRACTICES[f.slice(2)];
+    return {t:p.name, s:mailCount(f)+" mensajes · "+p.place}; }
   const sub = f.slice(2);
   return {t:SUBJECTS[sub].name, s:mailCount(f)+" mensajes · "+SUBJECTS[sub].code};
 }
@@ -1467,6 +1493,11 @@ function mailSidebar(){
     subs.map(k=>'<button class="ml-cat'+(mailFilter==="s:"+k?" on":"")+'" data-f="s:'+k+'">'+
         '<span class="dot" style="background:'+SUBJECTS[k].color+'"></span>'+esc(SUBJECTS[k].name)+
         '<span class="n">'+mailCount("s:"+k)+'</span></button>').join("")+
+
+    '<div class="ml-grp">Prácticas</div>'+
+    Object.keys(PRACTICES).map(k=>'<button class="ml-cat'+(mailFilter==="p:"+k?" on":"")+'" data-f="p:'+k+'">'+
+        '<span class="dot" style="background:'+PRACTICES[k].color+'"></span>'+esc(PRACTICES[k].name)+
+        '<span class="n">'+mailCount("p:"+k)+'</span></button>').join("")+
 
     '<div class="ml-grp">Grupos</div>'+
     GROUPS.map((g,i)=>'<button class="ml-cat'+(mailFilter==="g:"+i?" on":"")+'" data-f="g:'+i+'">'+
@@ -1497,6 +1528,20 @@ function recipientPicker(){
               '<div class="pick-sub">Estudiantes</div>'+
               (STUDENTS[k]||[]).map(n=>row(n,n)).join("")+
               row("Todo el paralelo · "+SUBJECTS[k].name, "Todo el paralelo")
+            : "");
+      }).join("")+
+
+      '<div class="pick-grp">Prácticas</div>'+
+      Object.keys(PRACTICES).map(k=>{
+        const p = PRACTICES[k], open = pickSubj==="p:"+k;
+        return '<button class="pick-row'+(open?" open":"")+'" data-picksubj="p:'+k+'">'+
+            '<span class="dot" style="background:'+p.color+'"></span>'+
+            esc(p.name)+I.chev+'</button>'+
+          (open
+            ? '<div class="pick-sub">Representante del empleador</div>'+
+              row(p.rep.name, p.rep.name)+
+              '<div class="pick-sub">Tutor académico</div>'+
+              row(p.tutor.split(" · ")[0], p.tutor.split(" · ")[0])
             : "");
       }).join("")+
 
@@ -1749,6 +1794,13 @@ function openSubject(key){
         }).join("")
       : '<div class="cal-empty">No hay entregas pendientes en esta materia.</div>')+
 
+    '<button class="sj-repo" data-repo="'+key+'">'+
+      '<span class="sj-repo-ico">'+I.folder+'</span>'+
+      '<span class="sj-repo-t"><b>Ir al repositorio de la materia</b>'+
+        '<span>guías, diapositivas, lecturas y grabaciones</span></span>'+
+      I.arrow+
+    '</button>'+
+
     '<button class="sj-avg" data-grades="'+key+'">'+
       '<span class="sj-avg-l"><b>Promedio actual</b><span>ver desglose y entregas</span></span>'+
       '<span class="sj-avg-n">'+s.grade+'</span>'+I.arrow+
@@ -1905,6 +1957,9 @@ infoBody.addEventListener("click", e=>{
 });
 
 infoBody.addEventListener("click", e=>{
+  const r = e.target.closest("[data-repo]");
+  if(r){ toast("Abriendo el repositorio de "+SUBJECTS[r.dataset.repo].name); return; }
+
   const g = e.target.closest("[data-grades]");
   if(g){ openGrades(g.dataset.grades); return; }
   const b = e.target.closest("[data-back]");
