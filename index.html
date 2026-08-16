@@ -78,7 +78,6 @@
 
   /* ---------- grid ---------- */
   .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--gap)}
-  #fixedRow{margin-bottom:var(--gap)}
   .col-2{grid-column:span 2}
   .col-3{grid-column:span 3}
   .col-4{grid-column:span 4}
@@ -102,7 +101,7 @@
     transition:box-shadow .2s,border-color .2s,transform .2s;
   }
   .card:hover{box-shadow:var(--shadow-lift);border-color:#dfe4ee}
-  .card-head{display:flex;align-items:center;gap:9px;margin-bottom:14px;padding-right:26px}
+  .card-head{display:flex;align-items:center;gap:9px;margin-bottom:14px;padding-right:60px}
   .card-title{font-size:13px;font-weight:650;letter-spacing:-.01em}
   .card-sub{font-size:12px;color:var(--muted);font-weight:500}
   .card-head .spacer{flex:1}
@@ -172,6 +171,16 @@
     color:var(--ink-2);background:var(--line-2);border-radius:7px;padding:2px 8px;letter-spacing:.04em;
   }
   .id-prog{margin:auto 0}
+  /* tarjeta de identidad a lo ancho: tres bloques en línea */
+  @media (min-width:901px){
+    #identityCard .identity{flex-direction:row;align-items:center;gap:28px}
+    #identityCard .id-top{width:330px;flex:none}
+    #identityCard .id-prog{flex:1;margin:0;min-width:0}
+    #identityCard .id-foot{
+      width:430px;flex:none;border-top:0;border-left:1px solid var(--line-2);
+      padding:0 0 0 26px;gap:14px 0;margin:0;
+    }
+  }
   .id-prog-top{display:flex;align-items:baseline;font-size:12px;color:var(--muted);margin-bottom:7px}
   .id-prog-top b{margin-left:auto;color:var(--ink);font-size:13px;font-variant-numeric:tabular-nums}
   .id-prog .track{margin-top:0;height:6px;border-radius:3px}
@@ -648,6 +657,66 @@
   .sim-x:hover{background:var(--danger-soft);color:var(--danger)}
   .sim-x svg{width:10px;height:10px}
 
+  /* ---------- lección ---------- */
+  #quizOverlay{z-index:65}
+  .start-box{border:1px solid var(--line);border-radius:var(--r-md);padding:16px;background:#fcfcfe}
+  .start-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-bottom:13px}
+  .start-grid div{padding-left:13px;border-left:1px solid var(--line-2)}
+  .start-grid div:first-child{padding-left:0;border-left:0}
+  .start-grid b{display:block;font-size:19px;font-weight:650;letter-spacing:-.03em;line-height:1.15}
+  .start-grid span{font-size:11px;color:var(--muted)}
+  .start-box p{margin:0 0 14px;font-size:12.5px;line-height:1.5;color:var(--ink-2)}
+  .start-box .btn-ghost{margin-top:0}
+  .btn-ghost svg{width:14px;height:14px}
+  .btn-ghost.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .btn-ghost.primary:hover{background:#000;border-color:#000}
+
+  .modal.qz-modal{max-width:780px;height:min(720px,90vh);display:flex;flex-direction:column;padding:0}
+  #quizBody{flex:1;min-height:0;display:flex;flex-direction:column}
+  .qz-head{display:flex;align-items:flex-start;gap:14px;padding:22px 24px 14px;
+    border-bottom:1px solid var(--line-2);padding-right:56px}
+  .qz-title{font-size:19px;font-weight:650;letter-spacing:-.03em;margin-top:4px}
+  .qz-clock{margin-left:auto;text-align:right;flex:none}
+  .qz-clock b{display:block;font-size:26px;font-weight:650;letter-spacing:-.03em;
+    font-variant-numeric:tabular-nums;color:var(--ink)}
+  .qz-clock.is-low b{color:var(--danger)}
+  .qz-prog{display:flex;align-items:center;gap:12px;padding:12px 24px;border-bottom:1px solid var(--line-2)}
+  .qz-prog .track{flex:1;margin:0}
+  .qz-prog span{font-size:11.5px;color:var(--muted);flex:none;font-variant-numeric:tabular-nums}
+  .qz-list{flex:1;min-height:0;overflow-y:auto;padding:18px 24px}
+  .qz-q{display:flex;gap:13px;padding:14px 0}
+  .qz-q + .qz-q{border-top:1px solid var(--line-2)}
+  .qz-n{width:24px;height:24px;border-radius:8px;flex:none;display:grid;place-items:center;
+    background:var(--accent-soft);color:var(--accent);font-size:12px;font-weight:700;margin-top:2px}
+  .qz-body{flex:1;min-width:0}
+  .qz-text{margin:0 0 10px;font-size:14px;line-height:1.5;color:var(--ink);font-weight:600}
+  .qz-opts{display:flex;flex-direction:column;gap:7px}
+  .qz-opt{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:10px 12px;
+    border:1px solid var(--line);border-radius:12px;background:#fff;font-size:13px;color:var(--ink2);
+    transition:border-color .15s,background .15s}
+  .qz-opt:hover{border-color:#c9cfe0;background:#fbfcff}
+  .qz-opt.on{border-color:var(--accent);background:var(--accent-soft);font-weight:600}
+  .qz-letter{width:22px;height:22px;border-radius:7px;flex:none;display:grid;place-items:center;
+    background:var(--line-2);color:var(--muted);font-size:11px;font-weight:700}
+  .qz-opt.on .qz-letter{background:var(--accent);color:#fff}
+  .qz-open{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:12px;
+    font:inherit;font-size:13.5px;line-height:1.5;color:var(--ink);resize:vertical;background:#fff}
+  .qz-open:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+  .qz-hint{display:block;font-size:11px;color:var(--muted);margin-top:6px}
+  .qz-foot{display:flex;align-items:center;gap:9px;padding:14px 24px;border-top:1px solid var(--line-2);
+    flex-wrap:wrap}
+  .qz-foot .btn-ghost{margin-top:0;width:auto;padding:10px 16px}
+  .qz-foot .primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .qz-foot .primary:hover{background:#000;border-color:#000}
+  .qz-note{font-size:11px;color:var(--muted);margin-left:auto}
+  @media (max-width:620px){
+    .start-grid{grid-template-columns:1fr 1fr;gap:12px 0}
+    .start-grid div:nth-child(3){padding-left:0;border-left:0}
+    .qz-head,.qz-prog,.qz-list,.qz-foot{padding-left:16px;padding-right:16px}
+    .qz-head{padding-right:52px}
+    .qz-note{display:none}
+  }
+
   /* ---------- bandeja de correo ---------- */
   .modal.ml-modal{
     max-width:880px;padding:0;overflow:hidden;position:relative;
@@ -818,7 +887,6 @@
     .types{grid-template-columns:1fr}
     .greet{display:none}
     .card-tools{opacity:1;transform:none}
-    .card-head{padding-right:26px}
     .cal-day{flex:0 0 84px;min-width:84px}
     .cd{font-size:14px}
   }
@@ -839,15 +907,18 @@
     </button>
   </header>
 
-  <!-- zona fija -->
-  <div class="grid" id="fixedRow">
-    <section class="card col-6" id="identityCard"></section>
-    <section class="card col-6" id="mailCard"></section>
-  </div>
-
-  <!-- widgets -->
+  <!-- dashboard: identidad fija + widgets -->
   <div class="grid" id="widgetGrid"></div>
 
+</div>
+
+<div class="overlay" id="quizOverlay">
+  <div class="modal qz-modal" role="dialog" aria-modal="true" aria-label="Lección en curso">
+    <button class="tk-close" id="quizClose" aria-label="Salir">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+    <div id="quizBody"></div>
+  </div>
 </div>
 
 <div class="overlay" id="mailOverlay">
@@ -899,19 +970,33 @@
 
 <script>
 /* ============ datos ============ */
+/* malla por niveles, con las horas semestrales de cada uno */
+const LEVELS = [
+  {n:"NIVEL 100 - I",  h:672}, {n:"NIVEL 100 - II", h:720},
+  {n:"NIVEL 200 - I",  h:720}, {n:"NIVEL 200 - II", h:720},
+  {n:"NIVEL 300 - I",  h:720}, {n:"NIVEL 300 - II", h:624},
+  {n:"NIVEL 400 - I",  h:720}, {n:"NIVEL 400 - II", h:288}
+];
+const TOTAL_HOURS = LEVELS.reduce((a,l)=>a+l.h, 0);          // 4 464
+
 const student = {
-  name:"Carlos Ruiz",
+  name:"Bart Simpson",
   career:"Diseño de Productos",
-  code:"0255273",
+  code:"202304713",
+  term:"2026-1",
+  levelIndex:4,                                              // NIVEL 300 - I
   active:true,
-  initials:"CR",
-  semester:"5.º semestre",
-  credits:22,
+  initials:"BS",
   gpa:"8.7",
-  progress:58,
   approved:26,
   totalSubjects:45
 };
+student.level      = LEVELS[student.levelIndex].n;           // NIVEL 300 - I
+student.levelShort = student.level.replace("NIVEL ", "");    // 300 - I
+student.levelHours = LEVELS[student.levelIndex].h;           // 720
+student.doneHours  = LEVELS.slice(0, student.levelIndex).reduce((a,l)=>a+l.h, 0);
+student.progress   = Math.round(student.doneHours / TOTAL_HOURS * 100);
+const miles = (n) => n.toLocaleString("es-EC");
 
 const SUBJECTS = {
   mate2:   {name:"Matemáticas II", code:"MAT-201", color:"#4f46e5", tasks:2, lessons:1, grade:"8.9"},
@@ -944,7 +1029,23 @@ const TASKS = [
    type:"Lección", points:15, mode:"Individual", where:"Lab. 2 · presencial",
    teacher:"PhD. R. Cedeño", attempts:"1 intento · 40 min",
    desc:"Evaluación escrita sobre ley de Coulomb, campo eléctrico y ley de Gauss. "+
-        "Se permite calculadora y una hoja de fórmulas escrita a mano."},
+        "Se permite calculadora y una hoja de fórmulas escrita a mano.",
+   minutes:40,
+   quiz:[
+     {q:"¿Cuál es la unidad del campo eléctrico en el Sistema Internacional?",
+      opts:["N/C, equivalente a V/m","C/N, equivalente a m/V","N·m², equivalente a J","C/m², equivalente a T"],
+      ok:0},
+     {q:"Según la ley de Coulomb, si se duplica la distancia entre dos cargas puntuales, la fuerza entre ellas…",
+      opts:["se duplica","se reduce a la mitad","se reduce a la cuarta parte","no cambia"],
+      ok:2},
+     {q:"El flujo eléctrico neto a través de una superficie gaussiana cerrada depende de…",
+      opts:["la forma de la superficie","la carga neta encerrada","la distancia a las cargas externas","el material de la superficie"],
+      ok:1},
+     {q:"Enunciá con tus palabras la ley de Gauss y explicá en qué caso conviene aplicarla en vez de la ley de Coulomb.",
+      open:true, hint:"Máximo 5 líneas. Se evalúa el razonamiento, no la extensión."},
+     {q:"Dos cargas de +2 μC y −2 μC están separadas 10 cm. Describí la dirección del campo eléctrico en el punto medio y justificá tu respuesta.",
+      open:true, hint:"Podés apoyarte en un esquema descrito en palabras."}
+   ]},
 
   {title:"Ensayo — Bauhaus", subject:"hist",
    due: now + 6*D + 3*H, published: now - 8*D + 6*H,
@@ -1110,7 +1211,7 @@ const MAILS = [
    b:"Estimados estudiantes, adjunto el cronograma actualizado de exámenes parciales. El de Matemáticas II se adelanta al 27 de agosto por la semana de integración. Cualquier cruce de horario me escriben antes del viernes."},
   {id:2,  from:"Prof. L. Andrade",    sub:"dib2",  role:"doc",
    s:"Retroalimentación de la entrega 2", time:"Ayer", unread:true,
-   b:"Carlos, revisé tu lámina. El encuadre mejoró bastante respecto a la primera entrega. Trabajá la línea de horizonte, quedó un poco alta y aplana el espacio. Nota: 9.5."},
+   b:"Bart, revisé tu lámina. El encuadre mejoró bastante respecto a la primera entrega. Trabajá la línea de horizonte, quedó un poco alta y aplana el espacio. Nota: 9.5."},
   {id:3,  from:"Biblioteca Central",  inst:true,
    s:"Tu préstamo vence en 3 días", time:"Mar", unread:false,
    b:"El libro «Design as Art» (Bruno Munari) vence el 18 de agosto. Podés renovarlo en línea si nadie lo ha reservado."},
@@ -1146,7 +1247,7 @@ const MAILS = [
    b:"Dejo mis apuntes por si a alguien le sirven para el ensayo. Incluyen las diapositivas que la profe no subió."},
   {id:14, from:"Dis. Andrea Salas",   prac:"emp",
    s:"Agenda de la primera evaluación", time:"11:20", unread:true,
-   b:"Carlos, la primera evaluación de prácticas la haremos el viernes 21 a las 15:00 en la sala de reuniones. Traé el registro de horas firmado y un resumen de los proyectos en los que participaste."},
+   b:"Bart, la primera evaluación de prácticas la haremos el viernes 21 a las 15:00 en la sala de reuniones. Traé el registro de horas firmado y un resumen de los proyectos en los que participaste."},
   {id:15, from:"Lcdo. Byron Chávez",  prac:"com",
    s:"Cambio de horario del taller del sábado", time:"Vie", unread:false,
    b:"El taller de este sábado empieza 10:00 en vez de 09:00 porque la sala está ocupada. Las horas igual se cuentan completas."}
@@ -1179,6 +1280,7 @@ const I = {
     '<circle cx="32" cy="24.5" r="9.5" fill="#b4b0aa"/>'+
     '<path d="M17.5 64V47.5c0-6.1 6.5-10.5 14.5-10.5s14.5 4.4 14.5 10.5V64Z" fill="#b4b0aa"/>'+
   '</svg>',
+  play:'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.2v13.6a1 1 0 0 0 1.53.85l10.6-6.8a1 1 0 0 0 0-1.7L9.53 4.35A1 1 0 0 0 8 5.2Z"/></svg>',
   grip:'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="9" cy="6" r="1.7"/><circle cx="15" cy="6" r="1.7"/><circle cx="9" cy="12" r="1.7"/><circle cx="15" cy="12" r="1.7"/><circle cx="9" cy="18" r="1.7"/><circle cx="15" cy="18" r="1.7"/></svg>',
   cloud:'<svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"><path d="M8.4 19.4A6.4 6.4 0 1 1 8.1 7 6.8 6.8 0 0 1 19.4 8.3 5.8 5.8 0 1 1 18.2 19.4Z"/></svg>',
   down:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12"/><path d="m7.5 11.5 4.5 4.5 4.5-4.5"/><path d="M4 19h16"/></svg>',
@@ -1235,9 +1337,8 @@ function head(icon, title, sub, extra){
 }
 
 /* ============ zona fija ============ */
-function renderIdentity(){
-  document.getElementById("identityCard").innerHTML =
-   '<div class="identity">'+
+function buildIdentity(){
+  return '<div class="identity">'+
      '<div class="id-top">'+
        '<div class="avatar" aria-label="Foto del estudiante">'+I.person+'</div>'+
        '<div style="min-width:0;flex:1">'+
@@ -1252,35 +1353,35 @@ function renderIdentity(){
      '<div class="id-prog">'+
        '<div class="id-prog-top"><span>Avance de la carrera</span><b>'+student.progress+'%</b></div>'+
        '<div class="track"><i style="width:'+student.progress+'%;background:linear-gradient(90deg,#6d63e8,#8f8cf0)"></i></div>'+
-       '<div class="id-prog-note">'+student.approved+' de '+student.totalSubjects+' materias aprobadas</div>'+
+       '<div class="id-prog-note">'+miles(student.doneHours)+' de '+miles(TOTAL_HOURS)+' horas · '+
+         student.approved+' de '+student.totalSubjects+' materias aprobadas</div>'+
      '</div>'+
      '<div class="id-foot">'+
-       '<div class="id-stat"><b>'+student.semester.split(" ")[0]+'</b><span>Semestre</span></div>'+
+       '<div class="id-stat"><b>'+esc(student.levelShort)+'</b><span>Nivel</span></div>'+
+       '<div class="id-stat"><b>'+esc(student.term)+'</b><span>Período</span></div>'+
+       '<div class="id-stat"><b>'+student.levelHours+'</b><span>Horas del nivel</span></div>'+
        '<div class="id-stat"><b>'+Object.keys(SUBJECTS).length+'</b><span>Cursando</span></div>'+
-       '<div class="id-stat"><b>'+student.credits+'</b><span>Créditos</span></div>'+
-       '<div class="id-stat"><b>'+student.approved+'</b><span>Tomadas</span></div>'+
-       '<div class="id-stat"><b>'+(student.totalSubjects-student.approved)+'</b><span>Por tomar</span></div>'+
+       '<div class="id-stat"><b>'+student.approved+'</b><span>Aprobadas</span></div>'+
        '<div class="id-stat"><b>'+student.gpa+'</b><span>Promedio</span></div>'+
      '</div>'+
    '</div>';
 }
 
-function renderMail(){
-  const MAIL = MAILS.slice(0,3).map(m=>({from:m.from, subj:m.s, time:m.time, unread:m.unread}));
+function buildMail(){
+  const list = MAILS.slice(0, 3);
   const unread = MAILS.filter(m=>m.unread).length;
-  const rows = MAIL.map(m =>
-    '<button class="mail-item">'+
+  const rows = list.map(m =>
+    '<span class="mail-item">'+
       '<span class="mail-dot'+(m.unread?'':' read')+'"></span>'+
       '<span class="mail-body">'+
         '<span class="mail-from">'+esc(m.from)+'<time>'+esc(m.time)+'</time></span>'+
-        '<span class="mail-subj">'+esc(m.subj)+'</span>'+
+        '<span class="mail-subj">'+esc(m.s)+'</span>'+
       '</span>'+
-    '</button>').join("");
-  document.getElementById("mailCard").innerHTML =
-    head(I.mail, "Bandeja de correo", "correo institucional",
+    '</span>').join("");
+  return head(I.mail, "Bandeja de correo", "correo institucional",
          unread ? '<span class="pill">'+unread+' sin leer</span>' : '') +
     '<div class="mail-list">'+rows+'</div>'+
-    '<button class="btn-ghost push" data-mail>Abrir bandeja '+I.arrow+'</button>';
+    '<button class="btn-ghost push">Abrir bandeja '+I.arrow+'</button>';
 }
 
 /* ============ widgets ============ */
@@ -1294,6 +1395,7 @@ let widgets = [
 let selDay = 0;
 
 const TYPES = {
+  mail:    {label:"Correo",      desc:"Tu bandeja institucional", icon:I.mail,  size:"col-6",  unique:true},
   calendar:{label:"Calendario",  desc:"Tus próximos días y clases", icon:I.cal,   size:"col-12", unique:true},
   tasks:   {label:"Tareas",      desc:"Resumen con cuenta regresiva", icon:I.task, size:"col-4",  unique:true},
   groups:  {label:"Grupos",      desc:"Equipos y grupos de estudio", icon:I.group, size:"col-4", unique:true}
@@ -1413,6 +1515,13 @@ function renderWidgets(){
     grid.appendChild(el('<div class="empty">Tu inicio está vacío. Toca <b>+</b> para agregar widgets.</div>'));
   }
 
+  // la identidad del estudiante es fija: siempre primera, no se quita ni se mueve
+  const idCard = document.createElement("section");
+  idCard.className = "card col-12";
+  idCard.id = "identityCard";
+  idCard.innerHTML = buildIdentity();
+  grid.appendChild(idCard);
+
   const nSubj = widgets.filter(w=>w.type==="subject"||w.type==="practice").length;
   let labelled = false;
   const tools = (removable) =>
@@ -1442,6 +1551,11 @@ function renderWidgets(){
       card.innerHTML = tools(false)+buildPractice(w.key);
     }
     if(w.type==="groups")   card.innerHTML = tools(true)+buildGroups();
+    if(w.type==="mail"){
+      card.dataset.mail = "1"; card.style.cursor = "pointer";
+      card.setAttribute("role","button"); card.tabIndex = 0;
+      card.innerHTML = tools(true)+buildMail();
+    }
     grid.appendChild(card);
   });
 
@@ -1853,7 +1967,7 @@ mailBody.addEventListener("click", e=>{
 
   const o = e.target.closest("[data-open]");
   if(o){ const m = MAILS.find(x=>x.id===+o.dataset.open);
-         m.unread=false; mailRead=m; mailView="read"; renderMailModal(); renderMail(); return; }
+         m.unread=false; mailRead=m; mailView="read"; renderMailModal(); renderWidgets(); return; }
 
   if(e.target.closest("[data-list]")){ mailView="list"; mailRead=null; renderMailModal(); return; }
   if(e.target.closest("[data-compose]")){ guard(()=>{ mailView="compose"; renderMailModal(); }); return; }
@@ -2244,13 +2358,148 @@ function openTaskDetail(i){
     '<div class="tk-h">Descripción</div>'+
     '<div class="tk-desc">'+esc(t.desc)+'</div>'+
 
-    '<div class="tk-h">Tu entrega</div>'+
-    '<div id="tkSubmitBox">'+renderSubmit(i)+'</div>';
+    (t.quiz
+      ? '<div class="tk-h">Rendir la lección</div>'+
+        '<div id="tkSubmitBox">'+renderStart(i)+'</div>'
+      : '<div class="tk-h">Tu entrega</div>'+
+        '<div id="tkSubmitBox">'+renderSubmit(i)+'</div>');
 
   taskOverlay.classList.add("open");
   wireDrop();
   tick();
 }
+
+/* --- lecciones: iniciar y rendir --- */
+const quizzes = {};              // idx -> {answers, sent, at}
+const qzOf = (i) => quizzes[i] || (quizzes[i] = {answers:{}, sent:false, at:null});
+
+function renderStart(i){
+  const t = TASKS[i], z = qzOf(i);
+  const nMult = t.quiz.filter(q=>!q.open).length, nOpen = t.quiz.length - nMult;
+
+  if(z.sent){
+    const hechas = Object.keys(z.answers).filter(k=>String(z.answers[k]).trim()!=="").length;
+    return '<div class="tk-done">'+
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m4 12 5 5L20 6"/></svg>'+
+        '<div><b>Lección rendida</b><span>'+fmtDue(z.at)+' · '+hechas+' de '+t.quiz.length+' preguntas respondidas</span></div>'+
+      '</div>'+
+      '<div class="sj-sub" style="margin-top:9px">El docente publicará la calificación en el desglose de notas.</div>'+
+      '<div class="tk-foot"><button class="btn-ghost" data-close>Cerrar</button></div>';
+  }
+
+  return '<div class="start-box">'+
+      '<div class="start-grid">'+
+        '<div><b>'+t.quiz.length+'</b><span>preguntas</span></div>'+
+        '<div><b>'+nMult+'</b><span>opción múltiple</span></div>'+
+        '<div><b>'+nOpen+'</b><span>respuesta escrita</span></div>'+
+        '<div><b>'+t.minutes+'</b><span>minutos</span></div>'+
+      '</div>'+
+      '<p>Una vez que empieces, el tiempo corre y no se puede pausar. Asegurate de tener a mano '+
+      'lo que permite el docente: '+esc(t.attempts)+'.</p>'+
+      '<button class="btn-ghost primary" data-startquiz="'+i+'">'+I.play+'Comenzar lección</button>'+
+    '</div>'+
+    '<div class="tk-foot"><button class="btn-ghost" data-close>Cerrar</button></div>';
+}
+
+/* --- pop-up de la lección en curso --- */
+const quizOverlay = document.getElementById("quizOverlay");
+const quizBody    = document.getElementById("quizBody");
+let quizTask = null, quizEnds = null, quizTimer = null;
+
+function startQuiz(i){
+  quizTask = i;
+  quizEnds = Date.now() + TASKS[i].minutes*60000;
+  renderQuiz();
+  quizOverlay.classList.add("open");
+  clearInterval(quizTimer);
+  quizTimer = setInterval(quizTick, 1000);
+}
+function closeQuiz(){
+  quizOverlay.classList.remove("open");
+  clearInterval(quizTimer); quizTimer = null;
+}
+function quizTick(){
+  const el = document.getElementById("qzClock"); if(!el) return;
+  let ms = quizEnds - Date.now();
+  if(ms <= 0){ ms = 0; clearInterval(quizTimer); }
+  const m = Math.floor(ms/60000), s = Math.floor(ms%60000/1000);
+  el.textContent = m+":"+String(s).padStart(2,"0");
+  el.parentElement.classList.toggle("is-low", ms < 5*60000);
+  if(ms === 0) sendQuiz(true);
+}
+
+function renderQuiz(){
+  const i = quizTask, t = TASKS[i], z = qzOf(i), s = SUBJECTS[t.subject];
+  const done = Object.keys(z.answers).filter(k=>String(z.answers[k]).trim()!=="").length;
+  const pct = Math.round(done/t.quiz.length*100);
+
+  quizBody.innerHTML =
+    '<div class="qz-head">'+
+      '<div>'+
+        '<div class="tk-kicker" style="margin:0"><span class="subj-dot" style="background:'+s.color+'"></span>'+
+          '<b>'+esc(s.name)+'</b><span>'+esc(s.code)+'</span></div>'+
+        '<div class="qz-title">'+esc(t.title)+'</div>'+
+      '</div>'+
+      '<div class="qz-clock"><span class="tk-cd-lbl">Tiempo</span><b id="qzClock">'+t.minutes+':00</b></div>'+
+    '</div>'+
+    '<div class="qz-prog"><div class="track"><i style="width:'+pct+'%;background:var(--accent)"></i></div>'+
+      '<span>'+done+' de '+t.quiz.length+' respondidas</span></div>'+
+
+    '<div class="qz-list">'+
+    t.quiz.map((q, n) => {
+      const val = z.answers[n];
+      return '<div class="qz-q">'+
+        '<div class="qz-n">'+(n+1)+'</div>'+
+        '<div class="qz-body">'+
+          '<p class="qz-text">'+esc(q.q)+'</p>'+
+          (q.open
+            ? '<textarea class="qz-open" data-ans="'+n+'" rows="4" placeholder="Escribí tu respuesta…">'+
+                esc(val||"")+'</textarea>'+
+              (q.hint?'<span class="qz-hint">'+esc(q.hint)+'</span>':'')
+            : '<div class="qz-opts">'+q.opts.map((o, k)=>
+                '<button class="qz-opt'+(val===k?" on":"")+'" data-pick="'+n+':'+k+'">'+
+                  '<span class="qz-letter">'+String.fromCharCode(65+k)+'</span>'+esc(o)+'</button>').join("")+
+              '</div>')+
+        '</div>'+
+      '</div>';
+    }).join("")+
+    '</div>'+
+
+    '<div class="qz-foot">'+
+      '<button class="btn-ghost primary" data-sendquiz>Entregar lección</button>'+
+      '<button class="btn-ghost" data-quizout>Salir sin entregar</button>'+
+      '<span class="qz-note">Las respuestas se guardan mientras respondés.</span>'+
+    '</div>';
+}
+
+function sendQuiz(auto){
+  const z = qzOf(quizTask);
+  z.sent = true; z.at = Date.now();
+  closeQuiz();
+  refreshSubmit();
+  toast(auto ? "Se acabó el tiempo · lección entregada automáticamente" : "Lección entregada");
+}
+
+quizBody.addEventListener("click", e=>{
+  const p = e.target.closest("[data-pick]");
+  if(p){ const [n,k] = p.dataset.pick.split(":");
+         qzOf(quizTask).answers[+n] = +k; renderQuiz(); return; }
+  if(e.target.closest("[data-sendquiz]")){ sendQuiz(false); return; }
+  if(e.target.closest("[data-quizout]")){ closeQuiz(); }
+});
+quizBody.addEventListener("input", e=>{
+  const a = e.target.closest("[data-ans]");
+  if(!a) return;
+  qzOf(quizTask).answers[+a.dataset.ans] = a.value;
+  // actualiza el avance sin volver a dibujar (para no perder el cursor)
+  const z = qzOf(quizTask), total = TASKS[quizTask].quiz.length;
+  const done = Object.keys(z.answers).filter(k=>String(z.answers[k]).trim()!=="").length;
+  const bar = quizBody.querySelector(".qz-prog .track i");
+  const txt = quizBody.querySelector(".qz-prog span");
+  if(bar) bar.style.width = Math.round(done/total*100)+"%";
+  if(txt) txt.textContent = done+" de "+total+" respondidas";
+});
+document.getElementById("quizClose").addEventListener("click", closeQuiz);
 
 /* --- entrega de archivos --- */
 const submissions = {};
@@ -2299,7 +2548,7 @@ function fileList(files, editable){
 function refreshSubmit(){
   const box = document.getElementById("tkSubmitBox");
   if(!box || currentTask===null) return;
-  box.innerHTML = renderSubmit(currentTask);
+  box.innerHTML = TASKS[currentTask].quiz ? renderStart(currentTask) : renderSubmit(currentTask);
   wireDrop();
 }
 
@@ -2336,6 +2585,9 @@ function wireDrop(){
 }));
 
 document.getElementById("tkBody").addEventListener("click", e=>{
+  const st = e.target.closest("[data-startquiz]");
+  if(st){ startQuiz(+st.dataset.startquiz); return; }
+
   const rm = e.target.closest("[data-rm]");
   if(rm){ subOf(currentTask).files.splice(+rm.dataset.rm,1); refreshSubmit(); return; }
   if(e.target.closest("[data-redo]")){ subOf(currentTask).at = null; refreshSubmit(); return; }
@@ -2374,7 +2626,8 @@ function closeModal(){ overlay.classList.remove("open"); }
 overlay.addEventListener("click", e=>{ if(e.target===overlay) closeModal(); });
 document.addEventListener("keydown", e=>{
   if(e.key==="Escape"){                       // cierra solo la capa de arriba
-    if(mailOverlay.classList.contains("open")){
+    if(quizOverlay.classList.contains("open")) closeQuiz();
+    else if(mailOverlay.classList.contains("open")){
       if(mailConfirm.classList.contains("on")){ mailConfirm.classList.remove("on"); pendingClose=null; }
       else guard(closeMail);
     }
@@ -2405,6 +2658,9 @@ document.getElementById("widgetGrid").addEventListener("click", e=>{
 
   const tk = e.target.closest("[data-task]");
   if(tk){ e.stopPropagation(); openTaskDetail(+tk.dataset.task); return; }
+
+  const ml = e.target.closest("[data-mail]");
+  if(ml){ openMail(); return; }
 
   const sj = e.target.closest("[data-subj]");
   if(sj){ openSubject(sj.dataset.subj); return; }
@@ -2441,11 +2697,7 @@ function toast(msg){
   const h = new Date().getHours();
   document.getElementById("greet").textContent =
     (h<12?"Buenos días":h<19?"Buenas tardes":"Buenas noches")+", "+student.name.split(" ")[0];
-  renderIdentity();
-  renderMail();
   renderWidgets();
-  document.getElementById("mailCard").addEventListener("click", openMail);
-  document.getElementById("mailCard").style.cursor = "pointer";
 })();
 </script>
 </body>
