@@ -531,6 +531,32 @@
   .sj-repo-t span{display:block;font-size:11.5px;color:var(--muted);margin-top:1px}
   .sj-repo > svg{width:14px;height:14px;color:var(--muted);flex:none}
 
+  /* repositorio */
+  .repo-grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(126px,1fr));
+    gap:10px;margin-top:14px;
+  }
+  .repo-card{
+    aspect-ratio:1;border:1px solid var(--line);border-radius:16px;background:#fff;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;
+    padding:12px;text-align:center;transition:border-color .15s,background .15s,transform .12s;
+  }
+  .repo-card:hover{border-color:var(--accent);background:var(--accent-soft);transform:translateY(-2px)}
+  .repo-ico svg{width:34px;height:34px;display:block}
+  .repo-t b{display:block;font-size:12.5px;font-weight:650;letter-spacing:-.01em}
+  .repo-t span{display:block;font-size:10.5px;color:var(--muted);line-height:1.3;margin-top:2px}
+  .dl{
+    display:flex;align-items:center;gap:6px;flex:none;font-size:11.5px;font-weight:650;
+    color:var(--ink-2);border:1px solid var(--line);border-radius:9px;padding:6px 10px;
+    transition:background .15s,border-color .15s,color .15s;
+  }
+  .dl:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+  .dl svg{width:13px;height:13px}
+  @media (max-width:620px){
+    .repo-grid{grid-template-columns:repeat(auto-fill,minmax(104px,1fr))}
+    .dl span{display:none}
+  }
+
   .sj-avg{
     width:100%;margin-top:18px;border-radius:var(--r-md);padding:15px 17px;
     background:var(--ink);color:#fff;display:flex;align-items:center;gap:12px;
@@ -621,8 +647,14 @@
   }
   .ml-new:hover{background:#000}
   .ml-new svg{width:14px;height:14px}
-  .ml-grp{font-size:10.5px;font-weight:650;letter-spacing:.08em;text-transform:uppercase;
-    color:var(--muted);padding:14px 8px 5px}
+  .ml-grp{
+    display:flex;align-items:center;gap:6px;width:100%;text-align:left;
+    font-size:10.5px;font-weight:650;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--muted);padding:14px 8px 5px;
+  }
+  .ml-grp svg{width:10px;height:10px;margin-left:auto;opacity:.55;transition:transform .15s;flex:none}
+  .ml-grp.open svg{transform:rotate(90deg)}
+  .ml-grp:hover{color:var(--ink-2)}
   .ml-cat{
     display:flex;align-items:center;gap:8px;width:100%;text-align:left;padding:8px 9px;
     border-radius:10px;font-size:12.5px;font-weight:600;color:var(--ink-2);transition:background .12s;
@@ -701,7 +733,12 @@
   .pick-row.open svg{transform:rotate(90deg)}
   .pick-row .dot,.pick-item .dot{width:7px;height:7px;border-radius:2px;flex:none}
   .pick-item{font-weight:500;padding-left:26px;font-size:12.5px}
+  .pick-item.lvl3{padding-left:42px}
   .pick-item.on{background:var(--ink);color:#fff}
+  .pick-row.lvl2{padding-left:26px;font-size:12.5px;color:var(--muted)}
+  .pick-row.lvl2 .cnt{margin-left:auto;font-size:11px;font-weight:650;opacity:.7;
+    font-variant-numeric:tabular-nums}
+  .pick-row.lvl2 svg{margin-left:6px}
   .pick-sub{font-size:10.5px;font-weight:650;color:var(--muted);padding:7px 10px 3px 26px;
     letter-spacing:.04em;text-transform:uppercase}
 
@@ -1122,6 +1159,8 @@ const I = {
     '<circle cx="32" cy="24.5" r="9.5" fill="#b4b0aa"/>'+
     '<path d="M17.5 64V47.5c0-6.1 6.5-10.5 14.5-10.5s14.5 4.4 14.5 10.5V64Z" fill="#b4b0aa"/>'+
   '</svg>',
+  cloud:'<svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"><path d="M8.4 19.4A6.4 6.4 0 1 1 8.1 7 6.8 6.8 0 0 1 19.4 8.3 5.8 5.8 0 1 1 18.2 19.4Z"/></svg>',
+  down:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12"/><path d="m7.5 11.5 4.5 4.5 4.5-4.5"/><path d="M4 19h16"/></svg>',
   folder:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2.5h8a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>',
   pen:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg>',
   clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.4l3.4 2"/></svg>',
@@ -1443,6 +1482,8 @@ let mailFilter = "all";      // all | inst | sched | s:<materia> | g:<idx>
 let mailView   = "list";     // list | read | compose
 let pickOpen   = false;      // selector de destinatario desplegado
 let pickSubj   = null;       // clase abierta dentro del selector
+let pickRole   = null;       // docentes / estudiantes abiertos dentro de la clase
+let sideOpen   = {cla:true, pra:true, gru:true};   // secciones de la barra lateral
 let mailRead   = null;
 let draft      = {to:"", subject:"", body:"", when:""};
 let scheduled  = [];
@@ -1481,6 +1522,10 @@ function mailSidebar(){
     '<button class="ml-cat'+(mailFilter===f?" on":"")+'" data-f="'+f+'">'+(extra||"")+
       esc(label)+'<span class="n">'+(f==="sched"?scheduled.length:mailCount(f))+'</span></button>';
 
+  const sec = (id,label,body) =>
+    '<button class="ml-grp'+(sideOpen[id]?" open":"")+'" data-sec="'+id+'">'+
+      esc(label)+I.chev+'</button>'+ (sideOpen[id] ? body : "");
+
   return '<aside class="ml-side">'+
     '<div class="ml-title">Bandeja</div>'+
     '<button class="ml-new" data-compose>'+I.pen+'Redactar</button>'+
@@ -1489,28 +1534,37 @@ function mailSidebar(){
     '<button class="ml-cat'+(mailFilter==="sched"?" on":"")+'" data-f="sched">'+I.clock+
       'Programados<span class="n">'+scheduled.length+'</span></button>'+
 
-    '<div class="ml-grp">Clases</div>'+
-    subs.map(k=>'<button class="ml-cat'+(mailFilter==="s:"+k?" on":"")+'" data-f="s:'+k+'">'+
+    // secciones colapsables
+    sec("cla","Clases",
+      subs.map(k=>'<button class="ml-cat'+(mailFilter==="s:"+k?" on":"")+'" data-f="s:'+k+'">'+
         '<span class="dot" style="background:'+SUBJECTS[k].color+'"></span>'+esc(SUBJECTS[k].name)+
-        '<span class="n">'+mailCount("s:"+k)+'</span></button>').join("")+
+        '<span class="n">'+mailCount("s:"+k)+'</span></button>').join(""))+
 
-    '<div class="ml-grp">Prácticas</div>'+
-    Object.keys(PRACTICES).map(k=>'<button class="ml-cat'+(mailFilter==="p:"+k?" on":"")+'" data-f="p:'+k+'">'+
+    sec("pra","Prácticas",
+      Object.keys(PRACTICES).map(k=>'<button class="ml-cat'+(mailFilter==="p:"+k?" on":"")+'" data-f="p:'+k+'">'+
         '<span class="dot" style="background:'+PRACTICES[k].color+'"></span>'+esc(PRACTICES[k].name)+
-        '<span class="n">'+mailCount("p:"+k)+'</span></button>').join("")+
+        '<span class="n">'+mailCount("p:"+k)+'</span></button>').join(""))+
 
-    '<div class="ml-grp">Grupos</div>'+
-    GROUPS.map((g,i)=>'<button class="ml-cat'+(mailFilter==="g:"+i?" on":"")+'" data-f="g:'+i+'">'+
+    sec("gru","Grupos",
+      GROUPS.map((g,i)=>'<button class="ml-cat'+(mailFilter==="g:"+i?" on":"")+'" data-f="g:'+i+'">'+
         '<span class="dot" style="background:'+g.colors[0]+'"></span>'+esc(g.name)+
-        '<span class="n">'+mailCount("g:"+i)+'</span></button>').join("")+
+        '<span class="n">'+mailCount("g:"+i)+'</span></button>').join(""))+
   '</aside>';
 }
 
 /* selector de destinatario: primero clases, y al abrir una clase, docentes y estudiantes */
 function recipientPicker(){
-  const row = (v,label,extra) =>
-    '<button class="pick-item'+(draft.to===v?" on":"")+'" data-to="'+esc(v)+'">'+
+  const row = (v,label,extra,lvl) =>
+    '<button class="pick-item'+(lvl===3?" lvl3":"")+(draft.to===v?" on":"")+'" data-to="'+esc(v)+'">'+
       (extra||"")+esc(label)+'</button>';
+
+  // subcategoría colapsable (docentes / estudiantes, representante / tutor…)
+  const sub = (id, label, count, items) => {
+    const open = pickRole===id;
+    return '<button class="pick-row lvl2'+(open?" open":"")+'" data-pickrole="'+id+'">'+
+        esc(label)+'<span class="cnt">'+count+'</span>'+I.chev+'</button>'+
+      (open ? items : "");
+  };
 
   return '<div class="pick'+(pickOpen?" open":"")+'">'+
     '<button class="pick-btn'+(draft.to?" has":"")+'" data-picktoggle>'+
@@ -1518,15 +1572,13 @@ function recipientPicker(){
     (pickOpen ? '<div class="pick-panel">'+
       '<div class="pick-grp">Clases</div>'+
       Object.keys(SUBJECTS).map(k=>{
-        const open = pickSubj===k;
+        const open = pickSubj===k, st = STUDENTS[k]||[];
         return '<button class="pick-row'+(open?" open":"")+'" data-picksubj="'+k+'">'+
             '<span class="dot" style="background:'+SUBJECTS[k].color+'"></span>'+
             esc(SUBJECTS[k].name)+I.chev+'</button>'+
           (open
-            ? '<div class="pick-sub">Docentes</div>'+
-              row(INFO[k].teacher.name, INFO[k].teacher.name)+
-              '<div class="pick-sub">Estudiantes</div>'+
-              (STUDENTS[k]||[]).map(n=>row(n,n)).join("")+
+            ? sub(k+":doc","Docentes",1, row(INFO[k].teacher.name, INFO[k].teacher.name,"",3))+
+              sub(k+":est","Estudiantes",st.length, st.map(n=>row(n,n,"",3)).join(""))+
               row("Todo el paralelo · "+SUBJECTS[k].name, "Todo el paralelo")
             : "");
       }).join("")+
@@ -1538,10 +1590,9 @@ function recipientPicker(){
             '<span class="dot" style="background:'+p.color+'"></span>'+
             esc(p.name)+I.chev+'</button>'+
           (open
-            ? '<div class="pick-sub">Representante del empleador</div>'+
-              row(p.rep.name, p.rep.name)+
-              '<div class="pick-sub">Tutor académico</div>'+
-              row(p.tutor.split(" · ")[0], p.tutor.split(" · ")[0])
+            ? sub("p"+k+":rep","Representante del empleador",1, row(p.rep.name, p.rep.name,"",3))+
+              sub("p"+k+":tut","Tutor académico",1,
+                  row(p.tutor.split(" · ")[0], p.tutor.split(" · ")[0],"",3))
             : "");
       }).join("")+
 
@@ -1682,7 +1733,16 @@ mailBody.addEventListener("click", e=>{
   }
   const ps = e.target.closest("[data-picksubj]");
   if(ps){ saveDraftFromForm();
-          pickSubj = pickSubj===ps.dataset.picksubj ? null : ps.dataset.picksubj;
+          const v = ps.dataset.picksubj;
+          pickSubj = pickSubj===v ? null : v; pickRole = null;
+          renderMailModal(); return; }
+  const pr = e.target.closest("[data-pickrole]");
+  if(pr){ saveDraftFromForm();
+          pickRole = pickRole===pr.dataset.pickrole ? null : pr.dataset.pickrole;
+          renderMailModal(); return; }
+  const sc = e.target.closest("[data-sec]");
+  if(sc){ saveDraftFromForm();
+          sideOpen[sc.dataset.sec] = !sideOpen[sc.dataset.sec];
           renderMailModal(); return; }
   const to = e.target.closest("[data-to]");
   if(to){ saveDraftFromForm(); draft.to = to.dataset.to;
@@ -1795,7 +1855,7 @@ function openSubject(key){
       : '<div class="cal-empty">No hay entregas pendientes en esta materia.</div>')+
 
     '<button class="sj-repo" data-repo="'+key+'">'+
-      '<span class="sj-repo-ico">'+I.folder+'</span>'+
+      '<span class="sj-repo-ico">'+I.cloud+'</span>'+
       '<span class="sj-repo-t"><b>Ir al repositorio de la materia</b>'+
         '<span>guías, diapositivas, lecturas y grabaciones</span></span>'+
       I.arrow+
@@ -1873,6 +1933,63 @@ function openGrades(key){
       '</div>';
     }).join("") : '<div class="cal-empty">Sin entregas programadas.</div>')+
 
+    '<div class="tk-foot"><button class="btn-ghost" data-close>Cerrar</button></div>';
+}
+
+/* --- repositorio de la materia --- */
+const MOD_NAMES = {
+  mate2:["Límites y continuidad","Derivadas","Aplicaciones de la derivada",
+         "Integrales indefinidas","Integrales definidas","Series y sucesiones"],
+  dib2: ["Fundamentos del trazo","Perspectiva isométrica","Perspectiva cónica",
+         "Sombras y volumen","Rendering a mano","Proyecto integrador"],
+  fis2: ["Carga y ley de Coulomb","Campo eléctrico","Ley de Gauss",
+         "Potencial eléctrico","Capacitancia","Corriente y circuitos"],
+  arte1:["Prehistoria y arte antiguo","Renacimiento","Modernidad",
+         "Vanguardias","Arte contemporáneo","Arte en Ecuador"],
+  hist: ["Revolución industrial","Arts and Crafts","Art Nouveau",
+         "Bauhaus","Diseño de posguerra","Diseño digital"]
+};
+const FILE_SETS = [
+  [["Guía de estudio.pdf","2.4 MB"],["Diapositivas de clase.pptx","8.1 MB"],
+   ["Ejercicios resueltos.pdf","1.2 MB"]],
+  [["Diapositivas de clase.pptx","6.7 MB"],["Lectura complementaria.pdf","3.9 MB"],
+   ["Grabación de la sesión.mp4","124 MB"],["Plantilla de entrega.docx","540 KB"]],
+  [["Guía de estudio.pdf","1.8 MB"],["Grabación de la sesión.mp4","98 MB"],
+   ["Banco de ejercicios.pdf","2.9 MB"]],
+  [["Diapositivas de clase.pptx","9.3 MB"],["Guía de laboratorio.pdf","1.1 MB"],
+   ["Material de apoyo.zip","22 MB"],["Rúbrica de evaluación.pdf","320 KB"]],
+];
+const modulesOf = (key) => (MOD_NAMES[key]||[]).map((n,i)=>({
+  n, files: FILE_SETS[i % FILE_SETS.length]
+}));
+
+function openRepo(key){
+  const s = SUBJECTS[key], mods = modulesOf(key);
+  infoBody.innerHTML =
+    '<button class="back" data-back="'+key+'">'+I.arrow+esc(s.name)+'</button>'+
+    '<div class="sj-sub" style="margin:0">Repositorio · '+esc(s.code)+'</div>'+
+    '<div class="sj-name" style="margin-top:2px">Material de la materia</div>'+
+    '<div class="repo-grid">'+
+      mods.map((m,i)=>'<button class="repo-card" data-mod="'+key+':'+i+'">'+
+        '<span class="repo-ico" style="color:'+s.color+'">'+I.folder+'</span>'+
+        '<span class="repo-t"><b>Módulo '+(i+1)+'</b><span>'+esc(m.n)+'</span></span>'+
+      '</button>').join("")+
+    '</div>'+
+    '<div class="tk-foot"><button class="btn-ghost" data-close>Cerrar</button></div>';
+}
+
+function openModule(key, i){
+  const s = SUBJECTS[key], m = modulesOf(key)[i];
+  infoBody.innerHTML =
+    '<button class="back" data-repo="'+key+'">'+I.arrow+'Repositorio'+'</button>'+
+    '<div class="sj-sub" style="margin:0">'+esc(s.name)+' · Módulo '+(i+1)+'</div>'+
+    '<div class="sj-name" style="margin-top:2px">'+esc(m.n)+'</div>'+
+    '<div class="tk-h">'+m.files.length+' archivos</div>'+
+    m.files.map(f=>'<div class="file-row" style="margin-bottom:7px">'+
+      '<span class="file-ico">'+I.file+'</span>'+
+      '<span class="file-main"><b>'+esc(f[0])+'</b><span>'+esc(f[1])+'</span></span>'+
+      '<button class="dl" data-dl="'+esc(f[0])+'" aria-label="Descargar">'+I.down+'Descargar</button>'+
+    '</div>').join("")+
     '<div class="tk-foot"><button class="btn-ghost" data-close>Cerrar</button></div>';
 }
 
@@ -1958,7 +2075,26 @@ infoBody.addEventListener("click", e=>{
 
 infoBody.addEventListener("click", e=>{
   const r = e.target.closest("[data-repo]");
-  if(r){ toast("Abriendo el repositorio de "+SUBJECTS[r.dataset.repo].name); return; }
+  if(r){ openRepo(r.dataset.repo); return; }
+
+  const md = e.target.closest("[data-mod]");
+  if(md){ const [k,i] = md.dataset.mod.split(":"); openModule(k, +i); return; }
+
+  const dl = e.target.closest("[data-dl]");
+  if(dl){
+    const name = dl.dataset.dl;
+    const blob = new Blob(
+      ["Archivo de ejemplo del prototipo del campus.\n\n"+name+
+       "\n\nEn la versión real, este enlace descarga el archivo subido por el docente."],
+      {type:"text/plain"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = name.replace(/\.[a-z0-9]+$/i, "") + ".txt";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
+    toast("Descargando "+name);
+    return;
+  }
 
   const g = e.target.closest("[data-grades]");
   if(g){ openGrades(g.dataset.grades); return; }
