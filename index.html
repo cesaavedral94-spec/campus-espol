@@ -113,15 +113,35 @@
   .glyph svg{width:15px;height:15px}
   .glyph svg[data-icon="crowd"]{width:18px;height:18px}
 
-  .remove{
-    position:absolute;top:10px;right:10px;width:24px;height:24px;border-radius:8px;
-    display:grid;place-items:center;color:var(--muted);background:#fff;
-    border:1px solid var(--line);opacity:0;transform:scale(.85);
-    transition:opacity .15s,transform .15s,color .15s,background .15s;
+  .card-tools{
+    position:absolute;top:10px;right:10px;z-index:2;display:flex;gap:4px;
+    opacity:0;transform:scale(.85);transition:opacity .15s,transform .15s;
   }
-  .card:hover .remove{opacity:1;transform:scale(1)}
+  .card:hover .card-tools{opacity:1;transform:scale(1)}
+  .remove,.drag-h{
+    width:24px;height:24px;border-radius:8px;display:grid;place-items:center;
+    color:var(--muted);background:#fff;border:1px solid var(--line);
+    transition:color .15s,background .15s,border-color .15s;
+  }
   .remove:hover{color:var(--danger);background:var(--danger-soft);border-color:#f6d4d2}
   .remove svg{width:12px;height:12px}
+  .drag-h{cursor:grab;touch-action:none}
+  .drag-h:hover{color:var(--ink);border-color:#c9cfe0}
+  .drag-h:active{cursor:grabbing}
+  .drag-h svg{width:13px;height:13px}
+
+  /* arrastre de widgets */
+  .card.is-drag{
+    position:fixed;z-index:60;pointer-events:none;margin:0;
+    box-shadow:0 20px 45px -14px rgba(16,24,40,.45);
+    transform:rotate(-.6deg) scale(1.02);opacity:.97;cursor:grabbing;
+  }
+  .drop-ph{
+    border:1.5px dashed var(--accent);border-radius:var(--r-lg);
+    background:var(--accent-soft);opacity:.7;
+  }
+  body.dragging{cursor:grabbing;user-select:none}
+  body.dragging .card:hover{box-shadow:var(--shadow);border-color:var(--line)}
 
   .pill{
     display:inline-flex;align-items:center;gap:5px;border-radius:999px;
@@ -797,7 +817,7 @@
     .card{padding:16px;border-radius:20px}
     .types{grid-template-columns:1fr}
     .greet{display:none}
-    .remove{opacity:1;transform:none}
+    .card-tools{opacity:1;transform:none}
     .card-head{padding-right:26px}
     .cal-day{flex:0 0 84px;min-width:84px}
     .cd{font-size:14px}
@@ -1159,6 +1179,7 @@ const I = {
     '<circle cx="32" cy="24.5" r="9.5" fill="#b4b0aa"/>'+
     '<path d="M17.5 64V47.5c0-6.1 6.5-10.5 14.5-10.5s14.5 4.4 14.5 10.5V64Z" fill="#b4b0aa"/>'+
   '</svg>',
+  grip:'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="9" cy="6" r="1.7"/><circle cx="15" cy="6" r="1.7"/><circle cx="9" cy="12" r="1.7"/><circle cx="15" cy="12" r="1.7"/><circle cx="9" cy="18" r="1.7"/><circle cx="15" cy="18" r="1.7"/></svg>',
   cloud:'<svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"><path d="M8.4 19.4A6.4 6.4 0 1 1 8.1 7 6.8 6.8 0 0 1 19.4 8.3 5.8 5.8 0 1 1 18.2 19.4Z"/></svg>',
   down:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12"/><path d="m7.5 11.5 4.5 4.5 4.5-4.5"/><path d="M4 19h16"/></svg>',
   folder:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2.5h8a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>',
@@ -1392,33 +1413,35 @@ function renderWidgets(){
     grid.appendChild(el('<div class="empty">Tu inicio está vacío. Toca <b>+</b> para agregar widgets.</div>'));
   }
 
-  // los widgets agregados van arriba; materias y prácticas siempre al final
-  const subs = widgets.filter(w=>w.type==="subject");
-  const pracs = widgets.filter(w=>w.type==="practice");
-  const rest = widgets.filter(w=>w.type!=="subject" && w.type!=="practice");
+  const nSubj = widgets.filter(w=>w.type==="subject"||w.type==="practice").length;
   let labelled = false;
+  const tools = (removable) =>
+    '<div class="card-tools">'+
+      '<button class="drag-h" data-drag aria-label="Mover widget" title="Arrastrá para mover">'+I.grip+'</button>'+
+      (removable?'<button class="remove" data-x aria-label="Quitar">'+I.x+'</button>':'')+
+    '</div>';
 
-  rest.concat(subs, pracs).forEach(w=>{
+  widgets.forEach(w=>{
     if((w.type==="subject" || w.type==="practice") && !labelled){
       labelled = true;
-      grid.appendChild(el('<div class="section-label">Materias y prácticas · '+(subs.length+pracs.length)+'</div>'));
+      grid.appendChild(el('<div class="section-label">Materias y prácticas · '+nSubj+'</div>'));
     }
     const card = document.createElement("section");
     card.className = "card "+w.size;
     card.dataset.id = w.id;
-    if(w.type==="calendar") card.innerHTML = '<button class="remove" data-x aria-label="Quitar">'+I.x+'</button>'+buildCalendar();
-    if(w.type==="tasks")    card.innerHTML = buildTasks();   // fijo: el estudiante no puede quitarlo
+    if(w.type==="calendar") card.innerHTML = tools(true)+buildCalendar();
+    if(w.type==="tasks")    card.innerHTML = tools(false)+buildTasks();  // fijo: no se puede quitar
     if(w.type==="subject"){
       card.classList.add("subj"); card.dataset.subj = w.key;
       card.setAttribute("role","button"); card.tabIndex = 0;
-      card.innerHTML = buildSubject(w.key);
+      card.innerHTML = tools(false)+buildSubject(w.key);
     }
     if(w.type==="practice"){
       card.classList.add("subj"); card.dataset.prac = w.key;
       card.setAttribute("role","button"); card.tabIndex = 0;
-      card.innerHTML = buildPractice(w.key);
+      card.innerHTML = tools(false)+buildPractice(w.key);
     }
-    if(w.type==="groups")   card.innerHTML = '<button class="remove" data-x aria-label="Quitar">'+I.x+'</button>'+buildGroups();
+    if(w.type==="groups")   card.innerHTML = tools(true)+buildGroups();
     grid.appendChild(card);
   });
 
@@ -1430,6 +1453,80 @@ function renderWidgets(){
   setupStrip();
   tick();
 }
+
+/* ============ reordenar widgets arrastrando ============ */
+let drag = null;
+
+function onDragStart(e){
+  const h = e.target.closest("[data-drag]"); if(!h) return;
+  e.preventDefault();
+  const card = h.closest(".card");
+  const grid = document.getElementById("widgetGrid");
+  const r = card.getBoundingClientRect();
+
+  const ph = document.createElement("div");
+  ph.className = "drop-ph "+[...card.classList].find(c=>c.startsWith("col-"));
+  ph.style.height = r.height+"px";
+  card.after(ph);
+
+  drag = {card, ph, grid, dx:e.clientX-r.left, dy:e.clientY-r.top, w:r.width, h:r.height};
+  card.classList.add("is-drag");
+  card.style.width = r.width+"px";
+  card.style.height = r.height+"px";
+  card.style.left = "0px"; card.style.top = "0px";
+  document.body.classList.add("dragging");
+  moveCard(e.clientX, e.clientY);
+
+  window.addEventListener("pointermove", onDragMove);
+  window.addEventListener("pointerup", onDragEnd);
+  window.addEventListener("pointercancel", onDragEnd);
+}
+
+function moveCard(x,y){
+  drag.card.style.transform =
+    "translate("+(x-drag.dx)+"px,"+(y-drag.dy)+"px) rotate(-.6deg) scale(1.02)";
+}
+
+function onDragMove(e){
+  if(!drag) return;
+  e.preventDefault();
+  moveCard(e.clientX, e.clientY);
+
+  // ¿sobre qué tarjeta está el cursor?
+  const under = document.elementsFromPoint(e.clientX, e.clientY)
+    .find(n => n.classList?.contains("card") && n!==drag.card && n.dataset.id);
+  if(under){
+    const r = under.getBoundingClientRect();
+    const after = (e.clientX - r.left) > r.width/2;
+    if(after) under.after(drag.ph); else under.before(drag.ph);
+    return;
+  }
+  // si está sobre el encabezado de sección o el botón +, se coloca ahí
+  const other = document.elementsFromPoint(e.clientX, e.clientY)
+    .find(n => n.classList?.contains("section-label") || n.classList?.contains("add-slot"));
+  if(other) other.before(drag.ph);
+}
+
+function onDragEnd(){
+  if(!drag) return;
+  const {card, ph, grid} = drag;
+  ph.replaceWith(card);
+  card.classList.remove("is-drag");
+  card.style.cssText = "";
+  document.body.classList.remove("dragging");
+  window.removeEventListener("pointermove", onDragMove);
+  window.removeEventListener("pointerup", onDragEnd);
+  window.removeEventListener("pointercancel", onDragEnd);
+  drag = null;
+
+  // el nuevo orden del DOM manda
+  const order = [...grid.querySelectorAll(".card[data-id]")].map(n=>n.dataset.id);
+  widgets.sort((a,b)=>order.indexOf(a.id)-order.indexOf(b.id));
+  renderWidgets();
+  toast("Widget movido");
+}
+
+document.getElementById("widgetGrid").addEventListener("pointerdown", onDragStart);
 
 /* rueda del mouse = desplazamiento lateral en el calendario */
 let stripLeft = 0;
@@ -2296,7 +2393,7 @@ document.getElementById("typeList").addEventListener("click", e=>{
   const b = e.target.closest(".type"); if(!b || b.disabled) return;
   const type = b.dataset.type;
   const w = {id:"w"+(++uid), type, size:TYPES[type].size};
-  widgets.push(w);
+  widgets.unshift(w);          // los nuevos aparecen arriba; después se pueden mover
   closeModal();
   renderWidgets();
   toast("Widget de "+TYPES[type].label.toLowerCase()+" agregado");
@@ -2304,6 +2401,8 @@ document.getElementById("typeList").addEventListener("click", e=>{
 
 /* ============ interacción ============ */
 document.getElementById("widgetGrid").addEventListener("click", e=>{
+  if(e.target.closest("[data-drag]")) return;   // el asa solo arrastra
+
   const tk = e.target.closest("[data-task]");
   if(tk){ e.stopPropagation(); openTaskDetail(+tk.dataset.task); return; }
 
